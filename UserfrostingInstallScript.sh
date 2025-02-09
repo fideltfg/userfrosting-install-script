@@ -4,20 +4,25 @@
 # This script installs PHP 8.3, Composer, Node.js, NPM, MySQL, Nginx, and sets up the UF environment.
 
 set -e  # Exit on any error
+RED="\e[31m"
+YELLOW="\e[33m"
+Green="\e[33m"
+ENDCOLOR="\e[0m"
+
 
 if [ -f .env ]; then
     export $(grep -v '^#' .env | xargs)
 else
-    echo "Warning: No .env file was found! Default setup values will be used. This is not recommended."
+    echo -e "${YELLOW}Warning: No .env file found! Default setup values will be used. This is not recommended.${ENDCOLOR}"
     while true; do
         read -p "Do you wish to continue using the default setting (Y)es or (N)o ?" yn
         case $yn in
             [Yy]* ) 
-                echo "OK...Continuing install with default settings...."; 
+                echo "${YELLOW}OK...Continuing install with default settings....${ENDCOLOR}"; 
             
                 break;;
             [Nn]* ) 
-                echo "Canceling install. No changes were made to your system. Please read how to set up your .env file in the readme file @ https://github.com/fideltfg/userfrostinginstallscript/blob/main/README.md";
+                echo "Canceling install. No changes were made to your system. Please read how to set up your .env file in the readme file @ https://github.com/fideltfg/userfrostinginstallscript/raw/refs/heads/main/README.md";
                 exit;;
             * ) echo "Please answer (Y)es or (N)o.";;
         esac
@@ -43,24 +48,24 @@ USER_NAME="$USER"
 USER_HOME="/home/$USER"
 
 # Update system packages
-echo "Updating installed packages..."
+echo -e "${YELLOW}Updating installed packages...${ENDCOLOR}"
 sudo apt-get update -y && sudo apt-get upgrade -y
 
 # Install PHP and required extensions
-echo "Installing PHP 8.3 and required extensions..."
+echo -e "${YELLOW}Installing PHP 8.3 and required extensions...${ENDCOLOR}"
 sudo apt-get install -y php8.3 php8.3-{cli,bz2,curl,mbstring,intl,fpm,pdo-mysql,mysql,gd,dom,zip,sqlite3}
 
 # Install Composer
-echo "Installing Composer..."
+echo -e "${YELLOW}Installing Composer...${ENDCOLOR}"
 sudo apt-get install -y composer || (wget -qO composer-setup.php https://getcomposer.org/installer && sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php)
 
 # Install Node.js and NPM
-echo "Installing Node.js and NPM..."
+echo -e "${YELLOW}Installing Node.js and NPM...${ENDCOLOR}"
 sudo apt-get install -y nodejs npm
 
 # Install MySQL and configure database if enabled
 if [[ "$EXE_SQL" == true ]]; then
-    echo "Setting up MySQL database and user..."
+    echo -e "${YELLOW}Setting up MySQL database and user...${ENDCOLOR}"
     sudo apt-get install -y mysql-server
     sudo systemctl start mysql
     sudo systemctl enable mysql
@@ -74,15 +79,15 @@ if [[ "$EXE_SQL" == true ]]; then
 EOF
     
     if [[ -f "dump.sql" ]]; then
-        echo "Importing SQL dump file..."
+        echo -e "${YELLOW}Importing SQL dump file...${ENDCOLOR}"
         sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$DB_NAME" < dump.sql
     else
-        echo "No SQL dump file found. Skipping import."
+        echo -e "${YELLOW}No SQL dump file found. Skipping import."
     fi
 fi
 
 # Install and configure Nginx
-echo "Installing and configuring Nginx..."
+echo -e "${YELLOW}Installing and configuring Nginx...${ENDCOLOR}"
 sudo apt-get install -y nginx
 NGINX_CONF="/etc/nginx/sites-available/$SITE_NAME"
 DEFAULT_CONF="/etc/nginx/sites-available/default"
@@ -120,16 +125,16 @@ sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl restart nginx
 
 # Install UserFrosting
-echo "Installing UserFrosting..."
+echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
 composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
 
 # Set UF to production mode
 echo "UF_MODE=production" | sudo tee -a "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
 
 # Obtain and configure SSL certificate
-echo "Setting up SSL with Let's Encrypt..."
+echo -e "${YELLOW}Setting up SSL with Let's Encrypt..."
 sudo apt-get install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d "$DOMAIN_NAME" --non-interactive --agree-tos -m "$EMAIL"
 sudo systemctl reload nginx
 
-echo "UserFrosting installation complete. Visit: https://$DOMAIN_NAME"
+echo -e "${GREEN}UserFrosting installation complete. Visit: https://$DOMAIN_NAME${ENDCOLOR}"
