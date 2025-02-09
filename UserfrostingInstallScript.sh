@@ -132,7 +132,7 @@ composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
 echo "UF_MODE=production" | sudo tee -a "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
 
 # Obtain and configure SSL certificate
-echo -e "${YELLOW}Setting up SSL with Let's Encrypt..."
+echo -e "${YELLOW}Setting up SSL with Let's Encrypt...${ENDCOLOR}"
 sudo apt-get install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d "$DOMAIN_NAME" --non-interactive --agree-tos -m "$EMAIL"
 sudo systemctl reload nginx
