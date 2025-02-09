@@ -6,9 +6,9 @@
 set -e  # Exit on any error
 
 # Set user-defined variables
-DOMAIN_NAME="nqview.com"
+DOMAIN_NAME="youdomain.com"
 EMAIL="admin@$DOMAIN_NAME"
-SITE_FOLDER="NQView"
+SITE_FOLDER="your_site_folder"
 USER_NAME="$USER"
 USER_HOME="/home/$USER"
 USERFROSTING_VERSION="^5.1"
