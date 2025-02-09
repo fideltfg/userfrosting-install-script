@@ -70,10 +70,13 @@ fi
 # Install and configure Nginx
 echo "Installing and configuring Nginx..."
 sudo apt-get install -y nginx
-NGINX_CONF="/etc/nginx/sites-available/$DOMAIN_NAME"
+NGINX_CONF="/etc/nginx/sites-available/$SITE_NAME"
+DEFAULT_CONF="/etc/nginx/sites-available/default"
+
 sudo tee "$NGINX_CONF" > /dev/null <<EOL
 server {
-    listen 80;
+    listen 80 default_server;
+    listen [::]:80 default_server;
     root $USER_HOME/$SITE_NAME/public;
     index index.php index.html;
     server_name $DOMAIN_NAME www.$DOMAIN_NAME;
@@ -84,6 +87,8 @@ server {
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;
         fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        include fastcgi_params;
     }
     location ~ /\.ht {
         deny all;
@@ -91,15 +96,20 @@ server {
 }
 EOL
 
+# Remove default Nginx configuration
+if [[ -f "$DEFAULT_CONF" ]]; then
+    sudo rm "$DEFAULT_CONF"
+fi
+
 # Enable Nginx site and restart service
-sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/
+sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl restart nginx
 
 # Install UserFrosting
 echo "Installing UserFrosting..."
 composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
 
-# set UF to production mode
+# Set UF to production mode
 echo "UF_MODE=production" | sudo tee -a "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
 
 # Obtain and configure SSL certificate
