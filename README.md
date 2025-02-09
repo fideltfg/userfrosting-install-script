@@ -46,7 +46,7 @@ sudo systemctl status mysql
 
 ## Notes
 - This script assumes MySQL authentication is set to `mysql_native_password`.
-- Nginx is configured to serve UserFrosting from `/home/$USER/NQView/public`.
+- Nginx is configured to serve UserFrosting from `$USER_HOME/$SITE_FOLDER/public`.
 - If a `dump.sql` file is found in the script directory, it will be imported into the database.
 - The script is designed to be non-interactive.
 
