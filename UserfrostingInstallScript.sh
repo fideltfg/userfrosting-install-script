@@ -5,9 +5,23 @@
 
 set -e  # Exit on any error
 
-# Load environment variables
 if [ -f .env ]; then
     export $(grep -v '^#' .env | xargs)
+else
+    echo "Warning: No .env file was found! Default setup values will be used. This is not recommended."
+    while true; do
+        read -p "Do you wish to continue using the default setting (Y)es or (N)o ?" yn
+        case $yn in
+            [Yy]* ) 
+                echo "OK...Continuing install with default settings...."; 
+            
+                break;;
+            [Nn]* ) 
+                echo "Canceling install. No changes were made to your system. Please read how to set up your .env file in the readme file @ https://github.com/fideltfg/userfrostinginstallscript/raw/refs/heads/main/README.md";
+                exit;;
+            * ) echo "Please answer (Y)es or (N)o.";;
+        esac
+    done
 fi
 
 # Set user-defined variables
