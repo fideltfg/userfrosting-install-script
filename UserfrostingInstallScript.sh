@@ -6,7 +6,7 @@
 set -e  # Exit on any error
 RED="\e[31m"
 YELLOW="\e[33m"
-Green="\e[33m"
+GREEN="\e[33m"
 ENDCOLOR="\e[0m"
 
 
