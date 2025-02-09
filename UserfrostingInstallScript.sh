@@ -5,21 +5,28 @@
 
 set -e  # Exit on any error
 
+# Load environment variables
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+fi
+
 # Set user-defined variables
-DOMAIN_NAME="youdomain.com"
-EMAIL="admin@$DOMAIN_NAME"
-SITE_FOLDER="your_site_folder"
-USER_NAME="$USER"
-USER_HOME="/home/$USER"
-USERFROSTING_VERSION="^5.1"
-GIT_REPO="userfrosting/UserFrosting"
-EXE_SQL=true
+DOMAIN_NAME="${DOMAIN_NAME:-example.com}"
+EMAIL="${EMAIL:-example@email.com}"
+SITE_NAME="${SITE_NAME:-$DOMAIN_NAME}"
+USERFROSTING_VERSION="${USERFROSTING_VERSION:-^5.1}"
+GIT_REPO="${GIT_REPO:-userfrosting/UserFrosting}"
+EXE_SQL="${EXE_SQL:-true}"
 
 # MySQL settings
-MYSQL_ROOT_PASSWORD="CHANGE_ME"
-DB_NAME="CHANGE_ME"
-DB_USER="CHANGE_ME"
-DB_PASSWORD="CHANGE_ME"
+MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-userfrosting}"
+DB_NAME="${DB_NAME:-userfrosting}"
+DB_USER="${DB_USER:-userfrosting}"
+DB_PASSWORD="${DB_PASSWORD:-userfrosting}"
+
+# DO NOT CHANGE THESE
+USER_NAME="$USER"
+USER_HOME="/home/$USER"
 
 # Update system packages
 echo "Updating installed packages..."
@@ -67,7 +74,7 @@ NGINX_CONF="/etc/nginx/sites-available/$DOMAIN_NAME"
 sudo tee "$NGINX_CONF" > /dev/null <<EOL
 server {
     listen 80;
-    root $USER_HOME/$SITE_FOLDER/public;
+    root $USER_HOME/$SITE_NAME/public;
     index index.php index.html;
     server_name $DOMAIN_NAME www.$DOMAIN_NAME;
 
@@ -90,10 +97,10 @@ sudo nginx -t && sudo systemctl restart nginx
 
 # Install UserFrosting
 echo "Installing UserFrosting..."
-composer create-project "$GIT_REPO" "$SITE_FOLDER" "$USERFROSTING_VERSION"
+composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
 
 # set UF to production mode
-echo "UF_MODE=production" | sudo tee -a "$USER_HOME/$SITE_FOLDER/app/.env" > /dev/null
+echo "UF_MODE=production" | sudo tee -a "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
 
 # Obtain and configure SSL certificate
 echo "Setting up SSL with Let's Encrypt..."
