@@ -19,7 +19,7 @@ This script automates the installation and configuration of [UserFrosting](https
 - (Optional) A `.env` file in the same directory to override default values
 
 ## Usage
-### 1. Configure Environment Variables (Optional)
+### 1. Configure Environment Variables (Recommended)
 If you want to override default settings, create a `.env` file in your home folder.
 ```ini
 DOMAIN_NAME=yourdomain.com
