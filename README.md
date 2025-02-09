@@ -48,7 +48,7 @@ sudo systemctl status mysql
 - This script assumes MySQL authentication is set to `mysql_native_password`.
 - Nginx is configured to serve UserFrosting from `$USER_HOME/$SITE_FOLDER/public`.
 - If a `dump.sql` file is found in the script directory, it will be imported into the database.
-- The script is designed to be non-interactive until it reaches the UD bakery section. You will need to enter your UF database and admin user details manualy.
+- The script is designed to be non-interactive until it reaches the UF bakery section. You will need to enter your UF database and admin user details manualy.
 
 ## License
 This script is provided as-is, without warranty. Modify it to fit your deployment needs.
