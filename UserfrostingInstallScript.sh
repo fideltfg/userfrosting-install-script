@@ -15,7 +15,7 @@ if [ -f .env ]; then
 else
     echo -e "${YELLOW}Warning: No .env file found! Default setup values will be used. This is not recommended.${ENDCOLOR}"
     while true; do
-        read -p "Do you wish to continue using the default setting (Y)es or (N)o ?" yn
+        read -p "Do you wish to continue using the default settings (Y)es or (N)o ? " yn
         case $yn in
             [Yy]* ) 
                 echo "${YELLOW}OK...Continuing install with default settings....${ENDCOLOR}"; 
