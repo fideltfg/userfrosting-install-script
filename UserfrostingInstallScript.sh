@@ -90,7 +90,6 @@ fi
 echo -e "${YELLOW}Installing and configuring Nginx...${ENDCOLOR}"
 sudo apt-get install -y nginx
 NGINX_CONF="/etc/nginx/sites-available/$SITE_NAME"
-DEFAULT_CONF="/etc/nginx/sites-available/default"
 
 sudo tee "$NGINX_CONF" > /dev/null <<EOL
 server {
@@ -116,12 +115,13 @@ server {
 EOL
 
 # Remove default Nginx configuration
-if [[ -f "$DEFAULT_CONF" ]]; then
-    sudo rm "$DEFAULT_CONF"
+if [[ -f "/etc/nginx/sites-enabled/default" ]]; then
+    sudo rm -f /etc/nginx/sites-enabled/default
 fi
 
 # Enable Nginx site and restart service
-sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/default
+echo -e "${YELLOW}Enabling Nginx site and restarting service.....${ENDCOLOR}"
+sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/$SITE_NAME
 sudo nginx -t && sudo systemctl restart nginx
 
 # Install UserFrosting
@@ -129,12 +129,14 @@ echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
 composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
 
 # Set UF to production mode
+echo -e "${YELLOW}Settung Userfrosting to Production Mode${ENDCOLOR}"
 echo "UF_MODE=production" | sudo tee -a "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
 
 # Obtain and configure SSL certificate
-echo -e "${YELLOW}Setting up SSL with Let's Encrypt...${ENDCOLOR}"
+echo -e "${YELLOW}Setting up SSL with Let's Encrypt...{ENDCOLOR}"
 sudo apt-get install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d "$DOMAIN_NAME" --non-interactive --agree-tos -m "$EMAIL"
 sudo systemctl reload nginx
-
+echo -e "${GREEN}==========================${ENDCOLOR}"
 echo -e "${GREEN}UserFrosting installation complete. Visit: https://$DOMAIN_NAME${ENDCOLOR}"
+echo -e "${GREEN}==========================${ENDCOLOR}"
