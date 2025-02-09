@@ -49,7 +49,6 @@ sudo systemctl status mysql
 - Nginx is configured to serve UserFrosting from `$USER_HOME/$SITE_FOLDER/public`.
 - If a `dump.sql` file is found in the script directory, it will be imported into the database.
 - The script is designed to be non-interactive until it reaches the UD bakery section. You will need to enter your UF database and admin user details manualy.
-- The site is set in dev mode by defailt. You will need to add a .env file to the site folder and set ufmode="production". ( I will update this soon so that it defaults to production.
 
 ## License
 This script is provided as-is, without warranty. Modify it to fit your deployment needs.
