@@ -6,20 +6,22 @@
 set -e  # Exit on any error
 
 # Set user-defined variables
-DOMAIN_NAME="nqview.com"
+DOMAIN_NAME="yourdomain.com"
 EMAIL="admin@$DOMAIN_NAME"
-SITE_FOLDER="NQView"
-USER_NAME="$USER"
-USER_HOME="/home/$USER"
+SITE_FOLDER="yourdomain.com"
 USERFROSTING_VERSION="^5.1"
-GIT_REPO="userfrosting/UserFrosting"
-EXE_SQL=true
+GIT_REPO="userfrosting/UserFrosting" # set this to the repo you wish to clone UF from.
+EXE_SQL=true # set this false to skip datbase configeration
 
 # MySQL settings
 MYSQL_ROOT_PASSWORD="CHANGE_ME"
 DB_NAME="CHANGE_ME"
 DB_USER="CHANGE_ME"
 DB_PASSWORD="CHANGE_ME"
+
+# do not change these
+USER_NAME="$USER"
+USER_HOME="/home/$USER"
 
 # Update system packages
 echo "Updating installed packages..."
