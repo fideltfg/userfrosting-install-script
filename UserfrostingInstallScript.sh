@@ -72,7 +72,18 @@ server {
     root $USER_HOME/$SITE_FOLDER/public;
     index index.php index.html;
     server_name $DOMAIN_NAME www.$DOMAIN_NAME;
+}
+server {
+    listen 443 ssl http2;
+    root $USER_HOME/$SITE_FOLDER/public;
+    index index.php index.html;
+    server_name $DOMAIN_NAME www.$DOMAIN_NAME;
 
+    ssl_certificate /etc/letsencrypt/live/$DOMAIN_NAME/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN_NAME/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    
     location / {
         try_files \$uri \$uri/ /index.php?\$query_string;
     }
