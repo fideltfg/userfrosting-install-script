@@ -92,7 +92,7 @@ sudo nginx -t && sudo systemctl restart nginx
 echo "Installing UserFrosting..."
 composer create-project "$GIT_REPO" "$SITE_FOLDER" "$USERFROSTING_VERSION"
 
-# set UF yo production mode
+# set UF to production mode
 echo "UF_MODE=production" | sudo tee -a "$USER_HOME/$SITE_FOLDER/app/.env" > /dev/null
 
 # Obtain and configure SSL certificate
