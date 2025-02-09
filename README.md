@@ -42,6 +42,7 @@ wget https://raw.githubusercontent.com/fideltfg/userfrostinginstallscript/refs/h
 chmod +x UserfrostingInstallScript.sh
 ./UserfrostingInstallScript.sh
 ```
+This will pull the latest version of the install script, correct the permissions and excute it. Simply follow any prompts given to complete the process.
 
 ### 3. Post-Installation
 Once completed, you can access UserFrosting at:
