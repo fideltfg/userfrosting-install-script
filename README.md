@@ -20,7 +20,7 @@ This script automates the installation and configuration of [UserFrosting](https
 
 ## Usage
 ### 1. Configure Environment Variables (Optional)
-If you want to override default settings, create a `.env` file in the same directory as the script with the following content, changing the values as needed:
+If you want to override default settings, create a `.env` file in your home folder.
 ```ini
 DOMAIN_NAME=yourdomain.com
 EMAIL=admin@yourdomain.com
@@ -35,8 +35,10 @@ DB_PASSWORD=securepassword
 ```
 
 ### 2. Run the Script
-Give execution permission and run the script:
+Run the followng commands to install all needed packages, setup MySQL, NGINX Userfrosting. DO NOT RUN AS ROOT!
 ```bash
+cd ~
+wget https://raw.githubusercontent.com/fideltfg/userfrostinginstallscript/refs/heads/main/UserfrostingInstallScript.sh -O UserfrostingInstallScript.sh
 chmod +x UserfrostingInstallScript.sh
 ./UserfrostingInstallScript.sh
 ```
