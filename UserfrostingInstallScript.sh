@@ -130,7 +130,12 @@ read -n 1 -s -r -p "${YELLOW}Press any key to continue...${ENDCOLOR}"
 echo -e "${ENDCOLOR}"
 
 echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
-composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
+#composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
+git clone https://github.com/userfrosting/UserFrosting.git $SITE_NAME
+cd $SITE_NAME
+composer install
+php bakery bake
+
 
 # Set UF to production mode
 echo -e "${YELLOW}Settung Userfrosting to Production Mode${ENDCOLOR}"
