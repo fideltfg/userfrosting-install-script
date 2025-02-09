@@ -125,8 +125,9 @@ sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/$SITE_NAME
 sudo nginx -t && sudo systemctl restart nginx
 
 # Install UserFrosting
-echo -e "${YELLOW}About to start Userfrosting Compser install iection. This portion has a timeout on user input.${ENDCOLOR}"
+echo -e "${YELLOW}About to start Userfrosting Compser install iection. This portion has a timeout on user input."
 read -n 1 -s -r -p "${YELLOW}Press any key to continue...${ENDCOLOR}"
+echo -e "${ENDCOLOR}"
 
 echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
 composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
