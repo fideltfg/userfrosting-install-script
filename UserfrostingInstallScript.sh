@@ -17,7 +17,7 @@ else
             
                 break;;
             [Nn]* ) 
-                echo "Canceling install. No changes were made to your system. Please read how to set up your .env file in the readme file @ https://github.com/fideltfg/userfrostinginstallscript/raw/refs/heads/main/README.md";
+                echo "Canceling install. No changes were made to your system. Please read how to set up your .env file in the readme file @ https://github.com/fideltfg/userfrostinginstallscript/blob/main/README.md";
                 exit;;
             * ) echo "Please answer (Y)es or (N)o.";;
         esac
