@@ -6,22 +6,20 @@
 set -e  # Exit on any error
 
 # Set user-defined variables
-DOMAIN_NAME="yourdomain.com"
+DOMAIN_NAME="nqview.com"
 EMAIL="admin@$DOMAIN_NAME"
-SITE_FOLDER="yourdomain.com"
+SITE_FOLDER="NQView"
+USER_NAME="$USER"
+USER_HOME="/home/$USER"
 USERFROSTING_VERSION="^5.1"
-GIT_REPO="userfrosting/UserFrosting" # set this to the repo you wish to clone UF from.
-EXE_SQL=true # set this false to skip datbase configeration
+GIT_REPO="userfrosting/UserFrosting"
+EXE_SQL=true
 
 # MySQL settings
 MYSQL_ROOT_PASSWORD="CHANGE_ME"
 DB_NAME="CHANGE_ME"
 DB_USER="CHANGE_ME"
 DB_PASSWORD="CHANGE_ME"
-
-# do not change these
-USER_NAME="$USER"
-USER_HOME="/home/$USER"
 
 # Update system packages
 echo "Updating installed packages..."
@@ -71,7 +69,8 @@ server {
     listen 80;
     root $USER_HOME/$SITE_FOLDER/public;
     index index.php index.html;
-    server_name $DOMAIN_NAME www.$DOMAIN_NAME;  
+    server_name $DOMAIN_NAME www.$DOMAIN_NAME;
+
     location / {
         try_files \$uri \$uri/ /index.php?\$query_string;
     }
@@ -92,6 +91,9 @@ sudo nginx -t && sudo systemctl restart nginx
 # Install UserFrosting
 echo "Installing UserFrosting..."
 composer create-project "$GIT_REPO" "$SITE_FOLDER" "$USERFROSTING_VERSION"
+
+# set UF yo production mode
+echo "UF_MODE=production" | sudo tee -a "$USER_HOME/$SITE_FOLDER/app/.env" > /dev/null
 
 # Obtain and configure SSL certificate
 echo "Setting up SSL with Let's Encrypt..."
