@@ -4,6 +4,7 @@
 This script automates the installation and configuration of [UserFrosting](https://www.userfrosting.com/) on an Ubuntu 24.04.1+ server. It installs required dependencies, sets up a MySQL database, configures an Nginx web server, and enables SSL with Let's Encrypt.
 
 ## Features
+- Loads configuration from an optional `.env` file for easy customization
 - Installs PHP 8.3 and necessary extensions
 - Installs Composer, Node.js, and NPM
 - Sets up MySQL and creates a database and user
@@ -15,16 +16,23 @@ This script automates the installation and configuration of [UserFrosting](https
 - A fresh Ubuntu 24.04.1+ installation
 - A registered domain name pointing to your server
 - Sudo privileges on the server
+- (Optional) A `.env` file in the same directory to override default values
 
 ## Usage
-### 1. Update Script Variables
-Before running the script, edit the following variables at the beginning of the file:
-- `DOMAIN_NAME`: Set to your domain (e.g., `example.com`)
-- `EMAIL`: Admin email for SSL certificate notifications
-- `MYSQL_ROOT_PASSWORD`: Set a secure password for MySQL root user
-- `DB_NAME`: Name of the database for UserFrosting
-- `DB_USER`: Database username
-- `DB_PASSWORD`: Database password
+### 1. Configure Environment Variables (Optional)
+If you want to override default settings, create a `.env` file in the same directory as the script with the following content, changing the values as needed:
+```ini
+DOMAIN_NAME=yourdomain.com
+EMAIL=admin@yourdomain.com
+SITE_NAME=your-site-folder
+USERFROSTING_VERSION=^5.1
+GIT_REPO=userfrosting/UserFrosting
+EXE_SQL=true
+MYSQL_ROOT_PASSWORD=securepassword
+DB_NAME=userfrosting
+DB_USER=userfrosting
+DB_PASSWORD=securepassword
+```
 
 ### 2. Run the Script
 Give execution permission and run the script:
@@ -45,11 +53,9 @@ sudo systemctl status mysql
 ```
 
 ## Notes
-- This script assumes MySQL authentication is set to `mysql_native_password`.
-- Nginx is configured to serve UserFrosting from `$USER_HOME/$SITE_FOLDER/public`.
+- This script loads configuration from an optional `.env` file.
+- MySQL authentication is set to `mysql_native_password`.
+- Nginx is configured to serve UserFrosting from `/home/$USER/$SITE_NAME/public`.
 - If a `dump.sql` file is found in the script directory, it will be imported into the database.
-- The script is designed to be non-interactive until it reaches the UF bakery section. You will need to enter your UF database and admin user details manualy.
-
-## License
-This script is provided as-is, without warranty. Modify it to fit your deployment needs.
-
+- The script is designed to hands off as much as possible. UF Bakery still needs input to setup the database and the UF admin user account.
+- SSL certificates are obtained automatically using Let's Encrypt.
