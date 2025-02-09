@@ -57,5 +57,5 @@ sudo systemctl status mysql
 - MySQL authentication is set to `mysql_native_password`.
 - Nginx is configured to serve UserFrosting from `/home/$USER/$SITE_NAME/public`.
 - If a `dump.sql` file is found in the script directory, it will be imported into the database.
-- The script is designed to be non-interactive.
+- The script is designed to hands off as much as possible. UF Bakery still needs input to setup the database and the UF admin user account.
 - SSL certificates are obtained automatically using Let's Encrypt.
