@@ -125,7 +125,7 @@ sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/$SITE_NAME
 sudo nginx -t && sudo systemctl restart nginx
 
 # Install UserFrosting
-echo -e "${YELLOW}About to start Userfrosting Compser install iection. This portion has a timeout on user input."
+echo -e "${YELLOW}About to start Userfrosting Compser install section. This portion has a timeout on user input."
 read -n 1 -s -r -p "${YELLOW}Press any key to continue...${ENDCOLOR}"
 echo -e "${ENDCOLOR}"
 
@@ -135,12 +135,14 @@ composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
 # Set UF to production mode
 echo -e "${YELLOW}Settung Userfrosting to Production Mode${ENDCOLOR}"
 echo "UF_MODE=production" | sudo tee -a "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
+echo -e "${GREEN}Completed!${ENDCOLOR}"
 
 # Obtain and configure SSL certificate
-echo -e "${YELLOW}Setting up SSL with Let's Encrypt...{ENDCOLOR}"
+echo -e "${YELLOW}Setting up SSL with Let's Encrypt...${ENDCOLOR}"
 sudo apt-get install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d "$DOMAIN_NAME" --non-interactive --agree-tos -m "$EMAIL"
 sudo systemctl reload nginx
+
 echo -e "${GREEN}==========================${ENDCOLOR}"
 echo -e "${GREEN}UserFrosting installation complete. Visit: https://$DOMAIN_NAME${ENDCOLOR}"
 echo -e "${GREEN}==========================${ENDCOLOR}"
