@@ -19,7 +19,7 @@ This script automates the installation and configuration of [UserFrosting](https
 - (Optional) A `.env` file in the same directory to override default values
 
 > [!WARNING]
-> The Userfrosting Composer portion of the setup has a timeout built in to it. Its advised that you DO NOT start that portion of the setup process and leave it unattended. A confiermation has been added to the install script prior to cloning Userfrosting to help prevent this timeout being hit.
+> The Userfrosting Composer portion of the setup has a timeout built in to it. Its advised that you DO NOT start that portion of the setup process and leave it unattended. A confirmation has been added to the install script prior to cloning Userfrosting to help prevent this timeout being hit.
 > Allowing the script to timeout may requier you to start over from a reinstall of Ubuntu.
 
 ## Usage
