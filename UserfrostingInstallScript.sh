@@ -36,6 +36,11 @@ SITE_NAME="${SITE_NAME:-$DOMAIN_NAME}"
 USERFROSTING_VERSION="${USERFROSTING_VERSION:-^5.1}"
 GIT_REPO="${GIT_REPO:-userfrosting/UserFrosting}"
 EXE_SQL="${EXE_SQL:-true}"
+DB_CONNECTION="${DB_CONNECTION:-mysql}"
+DB_HOST="${DB_HOST:-localhost}"
+DB_PORT="${DB_PORT:-3306}"
+MAIL_MAILER="${MAIL_MAILER:-smtp}"
+
 
 # MySQL settings
 MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-userfrosting}"
@@ -133,6 +138,29 @@ echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
 #composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
 git clone https://github.com/userfrosting/UserFrosting.git $SITE_NAME
 cd $SITE_NAME
+
+# copy the .env values over to the .env file in the $SITE_NAME/app directory
+sudo tee "$USER_HOME/$SITE_NAME/app/.env" > /dev/null <<EOL
+UF_MODE="production"
+URI_PUBLIC="${DOMAIN_NAME}"
+DB_CONNECTION="${DB_CONNECTION}"
+DB_HOST="${DB_HOST}"
+DB_PORT="${DB_PORT}"
+DB_NAME="${DB_NAME}"
+DB_USER="${DB_USER}"
+DB_PASSWORD="${DB_PASSWORD}"
+MAIL_MAILER="${MAIL_MAILER}"
+SMTP_SERVER="${SMTP_SERVER}"
+SMTP_USER="${SMTP_USER}"
+SMTP_PASSWORD="${SMTP_PASSWORD}"
+SMTP_PORT="${SMTP_PORT}"
+SMTP_AUTH="${SMTP_AUTH}"
+SMTP_SECURE="${SMTP_SECURE}"
+MAIL_FROM_ADDRESS="${MAIL_FROM_ADDRESS}"
+MAIL_FROM_NAME="${MAIL_FROM_NAME}"
+EOL
+
+
 composer install
 php bakery bake
 
