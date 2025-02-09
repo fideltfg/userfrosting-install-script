@@ -18,6 +18,9 @@ This script automates the installation and configuration of [UserFrosting](https
 - Sudo privileges on the server
 - (Optional) A `.env` file in the same directory to override default values
 
+> [!NOTE]
+> The Userfrosting Composer portion of the setup has a timeout built in to it. Its advised that you start that portion of the setup process and leave it unattended. A confiermation has been added to the install script just prior to starting the Uuserfrosting composer scripts tohelp prevent this timeout being hit. doing so may requier you to start over from a reinstall of Ubuntu.
+
 ## Usage
 ### 1. Configure Environment Variables (Recommended)
 If you want to override default settings, create a `.env` file in your home folder.
