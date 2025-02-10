@@ -43,16 +43,16 @@ ENDCOLOR="\e[0m"
 if [ -f .env ]; then
     export $(grep -v '^#' .env | xargs)
 else
-    echo -e "${YELLOW}Warning: No .env file found! Default setup values will be used. This is not recommended.${ENDCOLOR}"
+    echo -e "${RED}Warning: No .env file found! Default setup values will be used. This is not recommended.${ENDCOLOR}"
     while true; do
         read -p "Do you wish to continue using the default settings (Y)es or (N)o ? " yn
         case $yn in
             [Yy]* ) 
-                echo "${YELLOW}OK...Continuing install with default settings....${ENDCOLOR}"; 
+                echo -e "${BLUE}OK...Continuing install with default settings....${ENDCOLOR}"; 
             
                 break;;
             [Nn]* ) 
-                echo "Canceling install. No changes were made to your system. Please read how to set up your .env file in the readme file @ https://github.com/fideltfg/userfrostinginstallscript";
+                echo -e "${BLUE}Canceling install.${ENDCOLOR} No changes were made to your system. Please read how to set up your .env file in the readme file @ https://github.com/fideltfg/userfrostinginstallscript";
                 exit;;
             * ) echo "Please answer (Y)es or (N)o.";;
         esac
@@ -240,7 +240,7 @@ fi
 echo -e "${GREEN}==========================${ENDCOLOR}"
 echo -e "${GREEN}UserFrosting installation complete.${ENDCOLOR}"
 echo -e "Visit your site @: https://$DOMAIN_NAME"
-echo -e "UF MODE: ${BLUE}$UF_MODE ${ENDCOLOR}"
+echo -e "UF MODE: ${BLUE}$UF_MODE${ENDCOLOR}"
 if [[ "$UF_MODE" != "production" ]]; then
     echo -e "UF admin user: $UF_ADMIN_USER"
     echo -e "First Name: $UF_ADMIN_FIRST_NAME"
