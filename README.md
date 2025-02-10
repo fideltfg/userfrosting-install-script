@@ -81,7 +81,7 @@ If you set the `UF_MODE` to anything other than production you will be given a m
 
 > [!CAUTION]
 > Running this script in debug mode and then again in production mode on the same OS instance will leave records of your config values in log files.
-> Only run the script with UF_MODE set to production mode on a fresh clean server to avoid this. Dev &harr; Test &rarr; Wipe &rarr; Deploy
+> Only run the script with UF_MODE set to production on a fresh clean server to avoid this. Dev &harr; Test &rarr; Wipe &rarr; Deploy
 
 ### Logs
 Currently the logs for Nginx, MySQL and PHP are in ther default location the OS distro.
