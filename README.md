@@ -66,6 +66,6 @@ sudo systemctl status mysql
 
 ## Work-Arounds
 In order to prevent users from flooding Let's Encrypts servers when testing this script, the `--test-cert` flagg is set for certbot. This needs to be removed before final deployment. Run the following command to do this.
-```
+```bash
 sudo certbot --nginx -d "example.com" --non-interactive --agree-tos -m "youremail@example.com" && sudo systemctl reload nginx
 ```
