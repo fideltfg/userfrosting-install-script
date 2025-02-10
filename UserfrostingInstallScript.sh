@@ -252,3 +252,7 @@ echo -e "${GREEN}MySQL Root Password: $MYSQL_ROOT_PASSWORD ${ENDCOLOR}"
 
 echo -e "${GREEN}${ENDCOLOR}"
 echo -e "${GREEN}==========================${ENDCOLOR}"
+
+# delete this script
+rm -f "$USER_HOME/UserfrostingInstallScript.sh"
+exit 0
