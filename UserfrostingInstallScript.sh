@@ -231,12 +231,13 @@ else
 
 fi
 
-#set UF Log file permissions
+#set UF required permissions
+sudo usermod -a -G www-data $USER
 sudo chown -R $USER:www-data "$USER_HOME/$SITE_NAME/app/logs"
 sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/logs"
+sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/cache"
+sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/sessions"
 
-# set the correct permissions for the cache directory
-# sudo chown -R $USER:www-data "$USER_HOME/$SITE_NAME/app/cache"
 
 echo -e "${YELLOW}Backing Assets${ENDCOLOR}"
 php bakery assets:build
