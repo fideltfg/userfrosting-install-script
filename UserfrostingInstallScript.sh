@@ -239,7 +239,7 @@ sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/cache"
 sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/sessions"
 
 
-echo -e "${YELLOW}Backing Assets${ENDCOLOR}"
+echo -e "${YELLOW}Baking Assets${ENDCOLOR}"
 php bakery assets:build
 
 echo -e "${GREEN}==========================${ENDCOLOR}"
