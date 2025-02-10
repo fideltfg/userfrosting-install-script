@@ -79,10 +79,11 @@ UF MODE: production
 ==========================
 ```
 
-If you did set the `UF_MODE` to anything other than production you will be given a more verbose final output.
+If you set the `UF_MODE` to anything other than production you will be given a more verbose final output.
 
-
-If you encounter issues, check the logs:
+### Logs
+Currently the logs for Nginx, MySQL and PHP are in ther default location the OS distro.
+If you encounter issues, check the Nginx and MySQL logs with the command respectivly.
 ```bash
 sudo journalctl -u nginx --no-pager
 sudo systemctl status mysql
