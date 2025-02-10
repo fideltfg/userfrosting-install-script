@@ -100,7 +100,7 @@ sudo systemctl status mysql
 - SSL certificates are obtained automatically using Let's Encrypt when UF_MODE="production" else this part is skipped.
 
 ## Known Issues
-- Database seeding still requiers user input. When asked enter 0,1,2 to select all seeds.
+- Database migrations and seeds still requiers user input. See migration and seed sections above.
 
 ## Work-Arounds
 In order to prevent users from flooding Let's Encrypts servers when testing this script, the `--test-cert` flagg is set for certbot by default. 
