@@ -20,7 +20,7 @@ This script automates the installation and configuration of [UserFrosting](https
 
 ## Usage
 ### 1. Configure Environment Variables (Recommended)
-Create a `.env` file in your home folder. See the example .env file [here](https://github.com/fideltfg/userfrostinginstallscript/blob/main/.env_example)
+Create a `.env` file in your home folder and populate ALL the values. See the example .env file [here](https://github.com/fideltfg/userfrostinginstallscript/blob/main/.env_example)
 ```ini
 DOMAIN_NAME=yourdomain.com
 EMAIL=admin@yourdomain.com
