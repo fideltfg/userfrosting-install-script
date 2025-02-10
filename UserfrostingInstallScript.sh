@@ -238,6 +238,8 @@ sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/logs"
 # set the correct permissions for the cache directory
 # sudo chown -R $USER:www-data "$USER_HOME/$SITE_NAME/app/cache"
 
+echo -e "${YELLOW}Backing Assets${ENDCOLOR}"
+php bakery assets:build
 
 echo -e "${GREEN}==========================${ENDCOLOR}"
 echo -e "${GREEN}UserFrosting installation complete.${ENDCOLOR}"
