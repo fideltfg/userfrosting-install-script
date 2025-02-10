@@ -68,7 +68,7 @@ sudo systemctl status mysql
 In order to prevent users from flooding Let's Encrypts servers when testing this script, the `--test-cert` flagg is set for certbot by default. 
 
 > [!IMPORTANT]  
-> The `--test-cert` flag may cause Let's Encrypt to issue your site with an expired certificate. this in turn can cause issues with some antivirus softwear and will cause your browser to see the page as insecure.
+> The `--test-cert` flag may cause Let's Encrypt to issue your site with an expired certificate. This in turn can cause issues with some antivirus softwear and will cause your browser to see the page as insecure.
 
 The `--test-cert` flag needs to be removed before final deployment. Run the following command to do this. Remember to switch out the email and domain to match your sites settings.
 ```bash
