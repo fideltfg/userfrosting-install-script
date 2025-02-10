@@ -8,7 +8,7 @@
 #
 # cd ~ && wget https://github.com/fideltfg/userfrostinginstallscript/raw/refs/heads/main/UserfrostingInstallScript.sh -O UserfrostingInstallScript.sh && chmod +x UserfrostingInstallScript.sh && ./UserfrostingInstallScript.sh
 #
-# Do not run a root!
+# Do not run as root!
 #
 # MIT License
 
