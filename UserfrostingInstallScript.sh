@@ -77,11 +77,12 @@ SMTP_AUTH="${SMTP_AUTH:-true}"
 SMTP_SECURE="${SMTP_SECURE:-tls}"
 MAIL_FROM_ADDRESS="${MAIL_FROM_ADDRESS:-noreply@yourdomain.com}"
 MAIL_FROM_NAME="${MAIL_FROM_NAME:-UserFrosting}"
-UF_ADMIN_USER="${USER:-admin}"
-UF_ADMIN_EMAIL="${EMAIL:-example@email.com}"
-UF_ADMIN_PASSWORD="${PASSWORD:-password}"
-UF_ADMIN_FIRST_NAME="${FIRST_NAME:-Admin}"
-UF_ADMIN_LAST_NAME="${LAST_NAME:-User}"
+UF_MODE="${UF_MODE:-debug}"
+UF_ADMIN_USER="${UF_ADMIN_USER:-admin}"
+UF_ADMIN_EMAIL="${UF_ADMIN_EMAIL:-example@email.com}"
+UF_ADMIN_PASSWORD="${UF_ADMIN_PASSWORD:-password}"
+UF_ADMIN_FIRST_NAME="${UF_ADMIN_FIRST_NAME:-Admin}"
+UF_ADMIN_LAST_NAME="${UF_ADMIN_LAST_NAME:-User}"
 
 # MySQL settings
 MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-userfrosting}"
@@ -132,44 +133,9 @@ EOF
     fi
 fi
 
-# Install and configure Nginx
-echo -e "${YELLOW}Installing and configuring Nginx...${ENDCOLOR}"
+# Install Nginx
+echo -e "${YELLOW}Installing Nginx...${ENDCOLOR}"
 sudo apt-get install -y nginx
-NGINX_CONF="/etc/nginx/sites-available/$SITE_NAME"
-
-sudo tee "$NGINX_CONF" > /dev/null <<EOL
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    root $USER_HOME/$SITE_NAME/public;
-    index index.php index.html;
-    server_name $DOMAIN_NAME www.$DOMAIN_NAME;
-
-    location / {
-        try_files \$uri \$uri/ /index.php?\$query_string;
-    }
-    location ~ \.php$ {
-        include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-        include fastcgi_params;
-    }
-    location ~ /\.ht {
-        deny all;
-    }
-}
-EOL
-
-# Remove default Nginx configuration
-if [[ -f "/etc/nginx/sites-enabled/default" ]]; then
-    sudo rm -f /etc/nginx/sites-enabled/default
-fi
-
-# Enable Nginx site and restart service
-echo -e "${YELLOW}Enabling Nginx site and restarting service.....${ENDCOLOR}"
-#sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/default
-sudo cp -sf $NGINX_CONF /etc/nginx/sites-enabled/default
-sudo nginx -t && sudo systemctl restart nginx
 
 # Install UserFrosting
 echo -e "${YELLOW}About to start Userfrosting Compser install section. This portion has a timeout on user input."
@@ -183,7 +149,7 @@ cd $SITE_NAME
 
 echo -e "${YELLOW}Creating and populating .env file... ${ENDCOLOR}"
 printf 'UF_MODE="%s"\nURI_PUBLIC="%s"\nDB_CONNECTION="%s"\nDB_HOST="%s"\nDB_PORT="%s"\nDB_NAME="%s"\nDB_USER="%s"\nDB_PASSWORD="%s"\nMAIL_MAILER="%s"\nSMTP_SERVER="%s"\nSMTP_USER="%s"\nSMTP_PASSWORD="%s"\nSMTP_PORT="%s"\nSMTP_AUTH="%s"\nSMTP_SECURE="%s"\nMAIL_FROM_ADDRESS="%s"\nMAIL_FROM_NAME="%s"\n' \
-"production" "$DOMAIN_NAME" "$DB_CONNECTION" "$DB_HOST" "$DB_PORT" "$DB_NAME" "$DB_USER" "$DB_PASSWORD" "$MAIL_MAILER" "$SMTP_SERVER" "$SMTP_USER" "$SMTP_PASSWORD" "$SMTP_PORT" "$SMTP_AUTH" "$SMTP_SECURE" "$MAIL_FROM_ADDRESS" "$MAIL_FROM_NAME" \
+"$UF_MODE" "$DOMAIN_NAME" "$DB_CONNECTION" "$DB_HOST" "$DB_PORT" "$DB_NAME" "$DB_USER" "$DB_PASSWORD" "$MAIL_MAILER" "$SMTP_SERVER" "$SMTP_USER" "$SMTP_PASSWORD" "$SMTP_PORT" "$SMTP_AUTH" "$SMTP_SECURE" "$MAIL_FROM_ADDRESS" "$MAIL_FROM_NAME" \
 | sudo tee "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
 sudo chown -R $USER:$USER "$USER_HOME/$SITE_NAME/app/.env"
 
@@ -201,10 +167,64 @@ php bakery seed
 echo -e "${YELLOW}Creating admin user account...${ENDCOLOR}"
 php bakery create:admin-user --username="$UF_ADMIN_USER" --email="$UF_ADMIN_EMAIL" --password="$UF_ADMIN_PASSWORD" --firstName="$UF_ADMIN_FIRST_NAME" --lastName="$UF_ADMIN_LAST_NAME"
 
-# Set UF to production mode
-echo -e "${YELLOW}Settung Userfrosting to Production Mode${ENDCOLOR}"
-echo "UF_MODE=production" | sudo tee -a "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
 echo -e "${GREEN}Completed!${ENDCOLOR}"
+
+# Configure Nginx
+echo -e "${YELLOW}Configuring Nginx...${ENDCOLOR}"
+
+ROOT_DIR="$USER_HOME/$SITE_NAME/app/public"
+DEFAULT_CONFIG="/etc/nginx/sites-available/default"
+DEFAULT_ENABLED="/etc/nginx/sites-enabled/default"
+
+# sudo sed -i "s|root /var/www/html;|root $ROOT_DIR;|g" "$DEFAULT_CONFIG"
+# sudo sed -i "s|server_name _;|server_name _;|g" "$DEFAULT_CONFIG"
+
+sudo chmod +x "/home/$USER"
+sudo chown -R $USER:www-data "/home/$USER/$SITE_NAME"
+sudo chmod -R 755 "/home/$USER/$SITE_NAME"
+sudo chmod -R 775 "$ROOT_DIR"
+
+# Set Nginx configuration
+sudo rm -f /etc/nginx/sites-enabled/*
+
+sudo tee "$DEFAULT_CONFIG" > /dev/null <<EOL
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root $ROOT_DIR;
+    index index.php index.html;
+    server_name _;
+
+    add_header X-Frame-Options SAMEORIGIN;
+    add_header X-Content-Type-Options nosniff;
+
+    location = /index.php {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_keep_conn on;
+        fastcgi_pass   app:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+    location ~* \.(png|gif|jpg|jpeg|ico|css|js|woff|ttf|otf|woff2|eot)$ {
+        include /etc/nginx/mime.types;
+        expires max;
+        try_files $uri /index.php?$query_string;
+    }
+    location / {
+        index index.php;
+        try_files $uri /index.php?$query_string;
+    }
+    client_max_body_size 100M;
+}
+EOL
+
+
+# Deploy the config
+sudo ln -s "$DEFAULT_CONFIG" "$DEFAULT_ENABLED"
+
+# Restart Nginx to apply changes
+sudo nginx -t && sudo systemctl restart nginx
 
 # Obtain and configure SSL certificate
 echo -e "${YELLOW}Setting up SSL with Let's Encrypt...${ENDCOLOR}"
@@ -213,5 +233,22 @@ sudo certbot --nginx -d "$DOMAIN_NAME" --non-interactive --agree-tos --test-cert
 sudo systemctl reload nginx
 
 echo -e "${GREEN}==========================${ENDCOLOR}"
-echo -e "${GREEN}UserFrosting installation complete. Visit: https://$DOMAIN_NAME${ENDCOLOR}"
+echo -e "${GREEN}UserFrosting installation complete.${ENDCOLOR}"
+echo -e "${GREEN}Visit your site @: https://$DOMAIN_NAME ${ENDCOLOR}"
+echo -e "${GREEN}UF MODE: $UF_MODE ${ENDCOLOR}"
+echo -e "${GREEN}UF admin user: $UF_ADMIN_USER ${ENDCOLOR}"
+echo -e "${GREEN}First Name: $UF_ADMIN_FIRST_NAME ${ENDCOLOR}"
+echo -e "${GREEN}Last Name: $UF_ADMIN_LAST_NAME ${ENDCOLOR}"
+echo -e "${GREEN}Site Name: $SITE_NAME ${ENDCOLOR}"
+echo -e "${GREEN}Domain Name: $DOMAIN_NAME ${ENDCOLOR}"
+echo -e "${GREEN}Email: $UF_ADMIN_EMAIL ${ENDCOLOR}"
+echo -e "${GREEN}Password : $UF_ADMIN_PASSWORD ${ENDCOLOR}"
+echo -e "${GREEN}Document Root: $ROOT_DIR ${ENDCOLOR}"
+echo -e "${GREEN}DB Connection: $DB_CONNECTION ${ENDCOLOR}"
+echo -e "${GREEN}DB Name: $DB_NAME ${ENDCOLOR}"
+echo -e "${GREEN}DB User: $DB_USER ${ENDCOLOR}"
+echo -e "${GREEN}Password: $DB_PASSWORD ${ENDCOLOR}"
+echo -e "${GREEN}MySQL Root Password: $MYSQL_ROOT_PASSWORD ${ENDCOLOR}"
+
+echo -e "${GREEN}${ENDCOLOR}"
 echo -e "${GREEN}==========================${ENDCOLOR}"
