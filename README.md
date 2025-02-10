@@ -65,7 +65,7 @@ sudo systemctl status mysql
 - Database seeding still requiers user input. When asked enter 0,1,2 to select all seeds.
 
 ## Work-Arounds
-Inorder to prevent users from flooding Let's encrypts servers when testes this script the `--test-cert` flagg is set for certbot. This needs to be removed before final deployment. Run the following command to do this.
+In order to prevent users from flooding Let's Encrypts servers when testing this script, the `--test-cert` flagg is set for certbot. This needs to be removed before final deployment. Run the following command to do this.
 ```
-sudo certbot --nginx -d "example.com" --non-interactive --agree-tos -m "youremail@example.com"
+sudo certbot --nginx -d "example.com" --non-interactive --agree-tos -m "youremail@example.com" && sudo systemctl reload nginx
 ```
