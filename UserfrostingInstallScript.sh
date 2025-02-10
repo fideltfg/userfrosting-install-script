@@ -130,7 +130,7 @@ EOF
         echo -e "${YELLOW}Importing SQL dump file...${ENDCOLOR}"
         sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$DB_NAME" < dump.sql
     else
-        echo -e "${YELLOW}No SQL dump file found. Skipping import."
+        echo -e "${YELLOW}No SQL dump file found. Skipping import.${ENDCOLOR}"
     fi
 fi
 
@@ -173,7 +173,7 @@ echo -e "${GREEN}Completed!${ENDCOLOR}"
 # Configure Nginx
 echo -e "${YELLOW}Configuring Nginx...${ENDCOLOR}"
 
-ROOT_DIR="$USER_HOME/$SITE_NAME/app/public"
+ROOT_DIR="$USER_HOME/$SITE_NAME/public"
 DEFAULT_CONFIG="/etc/nginx/sites-available/default"
 DEFAULT_ENABLED="/etc/nginx/sites-enabled/default"
 
@@ -199,24 +199,18 @@ server {
     add_header X-Frame-Options SAMEORIGIN;
     add_header X-Content-Type-Options nosniff;
 
-    location = /index.php {
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_keep_conn on;
-        fastcgi_pass   app:9000;
-        fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include        fastcgi_params;
-    }
-    location ~* \.(png|gif|jpg|jpeg|ico|css|js|woff|ttf|otf|woff2|eot)$ {
-        include /etc/nginx/mime.types;
-        expires max;
-        try_files $uri /index.php?$query_string;
-    }
     location / {
-        index index.php;
-        try_files $uri /index.php?$query_string;
+        try_files \$uri \$uri/ /index.php?\$query_string;
     }
-    client_max_body_size 100M;
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        include fastcgi_params;
+    }
+    location ~ /\.ht {
+        deny all;
+    }
 }
 EOL
 
@@ -236,6 +230,14 @@ else
     echo -e "${BLUE}UF Mode $UF_MODE. Skipping SSL setup. Please configure SSL manually if needed.${ENDCOLOR}"    
 
 fi
+
+#set UF Log file permissions
+sudo chown -R $USER:www-data "$USER_HOME/$SITE_NAME/app/logs"
+sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/logs"
+
+# set the correct permissions for the cache directory
+# sudo chown -R $USER:www-data "$USER_HOME/$SITE_NAME/app/cache"
+
 
 echo -e "${GREEN}==========================${ENDCOLOR}"
 echo -e "${GREEN}UserFrosting installation complete.${ENDCOLOR}"
