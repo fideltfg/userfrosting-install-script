@@ -40,7 +40,19 @@ DB_CONNECTION="${DB_CONNECTION:-mysql}"
 DB_HOST="${DB_HOST:-localhost}"
 DB_PORT="${DB_PORT:-3306}"
 MAIL_MAILER="${MAIL_MAILER:-smtp}"
-
+SMTP_SERVER="${SMTP_SERVER:-smtp.example.com}"
+SMTP_USER="${SMTP_USER:-your@email.com}"
+SMTP_PASSWORD="${SMTP_PASSWORD:-password}"
+SMTP_PORT="${SMTP_PORT:-587}"
+SMTP_AUTH="${SMTP_AUTH:-true}"
+SMTP_SECURE="${SMTP_SECURE:-tls}"
+MAIL_FROM_ADDRESS="${MAIL_FROM_ADDRESS:-noreply@yourdomain.com}"
+MAIL_FROM_NAME="${MAIL_FROM_NAME:-UserFrosting}"
+UF_ADMIN_USER="${USER:-admin}"
+UF_ADMIN_EMAIL="${EMAIL:-example@email.com}"
+UF_ADMIN_PASSWORD="${PASSWORD:-password}"
+UF_ADMIN_FIRST_NAME="${FIRST_NAME:-Admin}"
+UF_ADMIN_LAST_NAME="${LAST_NAME:-User}"
 
 # MySQL settings
 MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-userfrosting}"
@@ -131,7 +143,7 @@ sudo nginx -t && sudo systemctl restart nginx
 
 # Install UserFrosting
 echo -e "${YELLOW}About to start Userfrosting Compser install section. This portion has a timeout on user input."
-read -n 1 -s -r -p "${YELLOW}Press any key to continue...${ENDCOLOR}"
+read -n 1 -s -r -p "Press any key to continue..."
 echo -e "${ENDCOLOR}"
 
 echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
@@ -139,30 +151,30 @@ echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
 git clone https://github.com/userfrosting/UserFrosting.git $SITE_NAME
 cd $SITE_NAME
 
-# copy the .env values over to the .env file in the $SITE_NAME/app directory
-sudo tee "$USER_HOME/$SITE_NAME/app/.env" > /dev/null <<EOL
-UF_MODE="production"
-URI_PUBLIC="${DOMAIN_NAME}"
-DB_CONNECTION="${DB_CONNECTION}"
-DB_HOST="${DB_HOST}"
-DB_PORT="${DB_PORT}"
-DB_NAME="${DB_NAME}"
-DB_USER="${DB_USER}"
-DB_PASSWORD="${DB_PASSWORD}"
-MAIL_MAILER="${MAIL_MAILER}"
-SMTP_SERVER="${SMTP_SERVER}"
-SMTP_USER="${SMTP_USER}"
-SMTP_PASSWORD="${SMTP_PASSWORD}"
-SMTP_PORT="${SMTP_PORT}"
-SMTP_AUTH="${SMTP_AUTH}"
-SMTP_SECURE="${SMTP_SECURE}"
-MAIL_FROM_ADDRESS="${MAIL_FROM_ADDRESS}"
-MAIL_FROM_NAME="${MAIL_FROM_NAME}"
-EOL
+printf 'UF_MODE="%s"\nURI_PUBLIC="%s"\nDB_CONNECTION="%s"\nDB_HOST="%s"\nDB_PORT="%s"\nDB_NAME="%s"\nDB_USER="%s"\nDB_PASSWORD="%s"\nMAIL_MAILER="%s"\nSMTP_SERVER="%s"\nSMTP_USER="%s"\nSMTP_PASSWORD="%s"\nSMTP_PORT="%s"\nSMTP_AUTH="%s"\nSMTP_SECURE="%s"\nMAIL_FROM_ADDRESS="%s"\nMAIL_FROM_NAME="%s"\n' \
+"production" "$DOMAIN_NAME" "$DB_CONNECTION" "$DB_HOST" "$DB_PORT" "$DB_NAME" "$DB_USER" "$DB_PASSWORD" "$MAIL_MAILER" "$SMTP_SERVER" "$SMTP_USER" "$SMTP_PASSWORD" "$SMTP_PORT" "$SMTP_AUTH" "$SMTP_SECURE" "$MAIL_FROM_ADDRESS" "$MAIL_FROM_NAME" \
+| sudo tee "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
 
+
+sudo chown -R $USER:$USER "$USER_HOME/$SITE_NAME/app/.env"
 
 composer install
-php bakery bake
+#php bakery bake -n
+php bakery setup:db --force --db_driver $DB_CONNECTION --db_name $DB_NAME --db_host $DB_HOST --db_port $DB_PORT --db_user $DB_USER --db_password $DB_PASSWORD
+
+php bakery seed 
+
+
+BCRYPT_HASH=$(python3 -c "import bcrypt; print(bcrypt.hashpw(b'$UF_ADMIN_PASSWORD', bcrypt.gensalt(rounds=10)).decode())")
+
+
+
+# seed the default admin user for userfrosting using a mysql query
+sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$DB_NAME" <<EOF
+INSERT INTO $DB_NAME.users
+(id, user_name, email, first_name, last_name, locale, group_id, flag_verified, flag_enabled, password)
+VALUES(0, '$UF_ADMIN_USER', '$UF_ADMIN_EMAIL', '$UF_ADMIN_FIRST_NAME', '$UF_ADMIN_LAST_NAME', 'en_US', 0, 1, 1, '$BCRYPT_HASH');
+EOF
 
 
 # Set UF to production mode
