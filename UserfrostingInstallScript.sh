@@ -177,9 +177,6 @@ ROOT_DIR="$USER_HOME/$SITE_NAME/public"
 DEFAULT_CONFIG="/etc/nginx/sites-available/default"
 DEFAULT_ENABLED="/etc/nginx/sites-enabled/default"
 
-# sudo sed -i "s|root /var/www/html;|root $ROOT_DIR;|g" "$DEFAULT_CONFIG"
-# sudo sed -i "s|server_name _;|server_name _;|g" "$DEFAULT_CONFIG"
-
 sudo chmod +x "/home/$USER"
 sudo chown -R $USER:www-data "/home/$USER/$SITE_NAME"
 sudo chmod -R 755 "/home/$USER/$SITE_NAME"
