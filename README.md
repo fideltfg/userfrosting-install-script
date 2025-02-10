@@ -20,7 +20,7 @@ This script automates the installation and configuration of [UserFrosting](https
 
 ## Usage
 ### 1. Configure Environment Variables (Recommended)
-If you want to override default settings, create a `.env` file in your home folder. See the example .env file [here](https://github.com/fideltfg/userfrostinginstallscript/blob/main/.env_example)
+Create a `.env` file in your home folder. See the example .env file [here](https://github.com/fideltfg/userfrostinginstallscript/blob/main/.env_example)
 ```ini
 DOMAIN_NAME=yourdomain.com
 EMAIL=admin@yourdomain.com
@@ -65,7 +65,7 @@ sudo systemctl status mysql
 - Database seeding still requiers user input. When asked enter 0,1,2 to select all seeds.
 
 ## Work-Arounds
-Inorder to prevent users from flooding Let's encrypts servers when testes this script the --test-cert flagg is set for certbot. This should be removed before final deployment. Or run the following command...
+Inorder to prevent users from flooding Let's encrypts servers when testes this script the '--test-cert' flagg is set for certbot. This should be removed before final deployment. Or run the following command...
 ```
 sudo certbot --nginx -d "example.com" --non-interactive --agree-tos -m "youremail@example.com"
 ```
