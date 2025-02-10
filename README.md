@@ -71,7 +71,7 @@ Enter your sudo password.
 
 ### 3. Post-Installation
 Once completed, you will see something like this 
-```
+```bash
 ==========================
 UserFrosting installation complete.
 Visit your site @: https://example.com
