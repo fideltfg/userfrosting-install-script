@@ -40,13 +40,46 @@ Run the followng commands to install all needed packages, setup MySQL, NGINX Use
 ```bash
 cd ~ && wget https://github.com/fideltfg/userfrostinginstallscript/raw/refs/heads/main/UserfrostingInstallScript.sh -O UserfrostingInstallScript.sh && chmod +x UserfrostingInstallScript.sh && ./UserfrostingInstallScript.sh
 ```
-This will pull the latest version of the install script, correct the permissions and excute it. Simply follow any prompts given to complete the process.
+This will pull the latest version of the install script, correct the permissions and excute it. 
+
+### User Input for the Bakery
+While I tried to make the script run unattended, due to the way the Userfrosting Bakery does its thing ( and me not giving time to this bit yet), the script will ask you enter your password and make a few choices if required.
+
+## `sudo` password
+The script will ask you twice for you user password. Once when it first starts and again after the composer install section.
+
+## Database Migrator
+The Database Migrator will askyou to confirm that you want to run the listed migrations. Confirm yes.
+
+## Seeder
+The Seeder will ask you:
+```bash
+ Select seed(s) to run. Multiple seeds can be selected using comma separated values:
+  [0] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultGroups
+  [1] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultPermissions
+  [2] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultRoles
+```
+Type `0,1,2` and hit enter. Or if you cloned a differnt repo check that all the requested seeds are listed and modify you input accodingly.
+
+You will then be asked to confrim your entry with `Do you really wish to continue ? (yes/no) [no]:` Confirm yes.
+
+Enter your sudo password.
+ 
+
 
 ### 3. Post-Installation
-Once completed, you can access UserFrosting at:
+Once completed, you will see something like this 
 ```
-https://yourdomain.com
+==========================
+UserFrosting installation complete.
+Visit your site @: https://example.com
+UF MODE: production
+==========================
 ```
+
+If you did set the `UF_MODE` to anything other than production you will be given a more verbose final output.
+
+
 If you encounter issues, check the logs:
 ```bash
 sudo journalctl -u nginx --no-pager
@@ -70,7 +103,7 @@ In order to prevent users from flooding Let's Encrypts servers when testing this
 > [!IMPORTANT]  
 > The `--test-cert` flag may cause Let's Encrypt to issue your site with an expired certificate. This in turn can cause issues with some antivirus softwear and will cause your browser to see the page as insecure.
 
-The `--test-cert` flag needs to be removed before final deployment. Run the following command to do this. Remember to switch out the email and domain to match your sites settings.
+The `--test-cert` flag needs to be removed for your site to be issued a valid certificate. Run the following command to do this. Remember to switch out the email and domain to match your sites settings.
 ```bash
 sudo certbot --nginx -d "example.com" --non-interactive --agree-tos -m "youremail@example.com" && sudo systemctl reload nginx
 ```
