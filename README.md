@@ -57,6 +57,15 @@ sudo systemctl status mysql
 - This script loads configuration from an optional `.env` file.
 - MySQL authentication is set to `mysql_native_password`.
 - Nginx is configured to serve UserFrosting from `/home/$USER/$SITE_NAME/public`.
-- If a `dump.sql` file is found in the script directory, it will be imported into the database.
-- The script is designed to hands off as much as possible. UF Bakery still needs input to setup the database and the UF admin user account.
-- SSL certificates are obtained automatically using Let's Encrypt.
+- If a `dump.sql` file is found in the script directory, it will be imported into the database. This has not been fully tested yet.
+- The script is designed to hands off as much as possible. UF Bakery still needs some input to setup seed the database.
+- SSL certificates are obtained automatically using Let's Encrypt when UF_MODE="production" else this part is skipped.
+
+## Known Issues
+- Database seeding still requiers user input. When asked enter 0,1,2 to select all seeds.
+
+## Work-Arounds
+Inorder to prevent users from flooding Let's encrypts servers when testes this script the --test-cert flagg is set for certbot. This should be removed before final deployment. Or run the following command...
+```
+sudo certbot --nginx -d "example.com" --non-interactive --agree-tos -m "youremail@example.com"
+```
