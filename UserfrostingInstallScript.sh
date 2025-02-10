@@ -151,31 +151,25 @@ echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
 git clone https://github.com/userfrosting/UserFrosting.git $SITE_NAME
 cd $SITE_NAME
 
+echo -e "${YELLOW}Creating and populating .env file... ${ENDCOLOR}"
 printf 'UF_MODE="%s"\nURI_PUBLIC="%s"\nDB_CONNECTION="%s"\nDB_HOST="%s"\nDB_PORT="%s"\nDB_NAME="%s"\nDB_USER="%s"\nDB_PASSWORD="%s"\nMAIL_MAILER="%s"\nSMTP_SERVER="%s"\nSMTP_USER="%s"\nSMTP_PASSWORD="%s"\nSMTP_PORT="%s"\nSMTP_AUTH="%s"\nSMTP_SECURE="%s"\nMAIL_FROM_ADDRESS="%s"\nMAIL_FROM_NAME="%s"\n' \
 "production" "$DOMAIN_NAME" "$DB_CONNECTION" "$DB_HOST" "$DB_PORT" "$DB_NAME" "$DB_USER" "$DB_PASSWORD" "$MAIL_MAILER" "$SMTP_SERVER" "$SMTP_USER" "$SMTP_PASSWORD" "$SMTP_PORT" "$SMTP_AUTH" "$SMTP_SECURE" "$MAIL_FROM_ADDRESS" "$MAIL_FROM_NAME" \
 | sudo tee "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
-
-
 sudo chown -R $USER:$USER "$USER_HOME/$SITE_NAME/app/.env"
 
+echo -e "${YELLOW}Running Composer install...${ENDCOLOR}"
 composer install
-#php bakery bake -n
+
+echo -e "${YELLOW}Building Database...${ENDCOLOR}"
 php bakery setup:db --force --db_driver $DB_CONNECTION --db_name $DB_NAME --db_host $DB_HOST --db_port $DB_PORT --db_user $DB_USER --db_password $DB_PASSWORD
 
+php bakery migrate
+
+echo -e "${YELLOW}Seeding Database...${ENDCOLOR}"
 php bakery seed 
 
-
-BCRYPT_HASH=$(python3 -c "import bcrypt; print(bcrypt.hashpw(b'$UF_ADMIN_PASSWORD', bcrypt.gensalt(rounds=10)).decode())")
-
-
-
-# seed the default admin user for userfrosting using a mysql query
-sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$DB_NAME" <<EOF
-INSERT INTO $DB_NAME.users
-(id, user_name, email, first_name, last_name, locale, group_id, flag_verified, flag_enabled, password)
-VALUES(0, '$UF_ADMIN_USER', '$UF_ADMIN_EMAIL', '$UF_ADMIN_FIRST_NAME', '$UF_ADMIN_LAST_NAME', 'en_US', 0, 1, 1, '$BCRYPT_HASH');
-EOF
-
+echo -e "${YELLOW}Creating admin user account...${ENDCOLOR}"
+php bakery create:admin-user --username="$UF_ADMIN_USER" --email="$UF_ADMIN_EMAIL" --password="$UF_ADMIN_PASSWORD" --firstName="$UF_ADMIN_FIRST_NAME" --lastName="$UF_ADMIN_LAST_NAME"
 
 # Set UF to production mode
 echo -e "${YELLOW}Settung Userfrosting to Production Mode${ENDCOLOR}"
