@@ -36,7 +36,7 @@ DB_PASSWORD=securepassword
 ```
 
 ### 2. Run the Script
-Run the followng commands to install all needed packages, setup MySQL, NGINX Userfrosting. DO NOT RUN AS ROOT!
+Run the followng command to install all needed packages, setup MySQL, NGINX Userfrosting. DO NOT RUN AS ROOT!
 ```bash
 cd ~ && wget https://github.com/fideltfg/userfrostinginstallscript/raw/refs/heads/main/UserfrostingInstallScript.sh -O UserfrostingInstallScript.sh && chmod +x UserfrostingInstallScript.sh && ./UserfrostingInstallScript.sh
 ```
