@@ -1,7 +1,36 @@
 #!/bin/bash
 
-# UserFrosting setup script for Ubuntu 24.04.1+
+# UserFrosting setup script for Ubuntu 24.04.1 or above.
 # This script installs PHP 8.3, Composer, Node.js, NPM, MySQL, Nginx, and sets up the UF environment.
+# Please read the  readme file @ https://github.com/fideltfg/userfrostinginstallscript for information about what this script does and how to use it.
+#
+# Run the following command from your home folder to download and run the newest version.
+#
+# cd ~ && wget https://github.com/fideltfg/userfrostinginstallscript/raw/refs/heads/main/UserfrostingInstallScript.sh -O UserfrostingInstallScript.sh && chmod +x UserfrostingInstallScript.sh && ./UserfrostingInstallScript.sh
+#
+# Do not run a root!
+#
+# MIT License
+
+# Copyright (c) 2025 fideltfg
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 set -e  # Exit on any error
 RED="\e[31m"
@@ -22,7 +51,7 @@ else
             
                 break;;
             [Nn]* ) 
-                echo "Canceling install. No changes were made to your system. Please read how to set up your .env file in the readme file @ https://github.com/fideltfg/userfrostinginstallscript/raw/refs/heads/main/README.md";
+                echo "Canceling install. No changes were made to your system. Please read how to set up your .env file in the readme file @ https://github.com/fideltfg/userfrostinginstallscript";
                 exit;;
             * ) echo "Please answer (Y)es or (N)o.";;
         esac
@@ -138,7 +167,8 @@ fi
 
 # Enable Nginx site and restart service
 echo -e "${YELLOW}Enabling Nginx site and restarting service.....${ENDCOLOR}"
-sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/$SITE_NAME
+#sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/default
+sudo cp -sf $NGINX_CONF /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl restart nginx
 
 # Install UserFrosting
@@ -179,7 +209,7 @@ echo -e "${GREEN}Completed!${ENDCOLOR}"
 # Obtain and configure SSL certificate
 echo -e "${YELLOW}Setting up SSL with Let's Encrypt...${ENDCOLOR}"
 sudo apt-get install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d "$DOMAIN_NAME" --non-interactive --agree-tos -m "$EMAIL"
+sudo certbot --nginx -d "$DOMAIN_NAME" --non-interactive --agree-tos --test-cert -m "$EMAIL"
 sudo systemctl reload nginx
 
 echo -e "${GREEN}==========================${ENDCOLOR}"
