@@ -49,7 +49,7 @@ While I tried to make the script run unattended, due to the way the Userfrosting
 The script will ask you twice for you user password. Once when it first starts and again after the composer install section.
 
 ##### Database Migrator
-The Database Migrator will askyou to confirm that you want to run the listed migrations. Confirm yes.
+~~The Database Migrator will askyou to confirm that you want to run the listed migrations. Confirm yes.~~
 
 ##### Seeder
 The Seeder will ask you:
