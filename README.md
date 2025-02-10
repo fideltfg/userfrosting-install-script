@@ -66,8 +66,6 @@ Type `0,1,2` and hit enter. Or if you cloned a differnt repo check that all the 
 You will then be asked to confrim your entry with `Do you really wish to continue ? (yes/no) [no]:` Confirm yes.
 
 Enter your sudo password.
- 
-
 
 ### 3. Post-Installation
 Once completed, you will see something like this 
@@ -80,6 +78,10 @@ UF MODE: production
 ```
 
 If you set the `UF_MODE` to anything other than production you will be given a more verbose final output.
+
+> [!CAUTION]
+> Running this script in debug mode and then again in production mode will leave records of your config values in log files.
+> Only run the script with UF_MODE set to production mode on a fresh clean server to avoid this. Dev **** Test Wipe Deploy
 
 ### Logs
 Currently the logs for Nginx, MySQL and PHP are in ther default location the OS distro.
