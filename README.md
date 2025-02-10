@@ -56,10 +56,10 @@ The Seeder will ask you:
  
 ```bash
  Select seed(s) to run. Multiple seeds can be selected using comma separated values:
- > [0] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultGroups
- > [1] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultPermissions
- > [2] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultRoles
- > >
+ [0] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultGroups
+ [1] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultPermission
+ [2] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultRoles
+ >
 ```
 Type `0,1,2` and hit enter. Or if you cloned a differnt repo check that all the requested seeds are listed and modify you input accodingly.
 
