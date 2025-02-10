@@ -36,6 +36,7 @@ MYSQL_ROOT_PASSWORD=securepassword
 DB_NAME=userfrosting
 DB_USER=userfrosting
 DB_PASSWORD=securepassword
+......
 ```
 
 ### 2. Run the Script
