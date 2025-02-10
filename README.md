@@ -42,16 +42,16 @@ cd ~ && wget https://github.com/fideltfg/userfrostinginstallscript/raw/refs/head
 ```
 This will pull the latest version of the install script, correct the permissions and excute it. 
 
-### User Input for the Bakery
+#### User Input for the Bakery
 While I tried to make the script run unattended, due to the way the Userfrosting Bakery does its thing ( and me not giving time to this bit yet), the script will ask you enter your password and make a few choices if required.
 
-## `sudo` password
+##### `sudo` password
 The script will ask you twice for you user password. Once when it first starts and again after the composer install section.
 
-## Database Migrator
+##### Database Migrator
 The Database Migrator will askyou to confirm that you want to run the listed migrations. Confirm yes.
 
-## Seeder
+##### Seeder
 The Seeder will ask you:
 ```bash
  Select seed(s) to run. Multiple seeds can be selected using comma separated values:
