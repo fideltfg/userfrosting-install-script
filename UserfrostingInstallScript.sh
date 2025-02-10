@@ -8,7 +8,7 @@
 #
 # cd ~ && wget https://github.com/fideltfg/userfrostinginstallscript/raw/refs/heads/main/UserfrostingInstallScript.sh -O UserfrostingInstallScript.sh && chmod +x UserfrostingInstallScript.sh && ./UserfrostingInstallScript.sh
 #
-# Do not run as root!
+# Do not run a root!
 #
 # MIT License
 
@@ -35,7 +35,8 @@
 set -e  # Exit on any error
 RED="\e[31m"
 YELLOW="\e[33m"
-GREEN="\e[33m"
+GREEN="\e[32m"
+BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
 
@@ -176,6 +177,9 @@ ROOT_DIR="$USER_HOME/$SITE_NAME/app/public"
 DEFAULT_CONFIG="/etc/nginx/sites-available/default"
 DEFAULT_ENABLED="/etc/nginx/sites-enabled/default"
 
+# sudo sed -i "s|root /var/www/html;|root $ROOT_DIR;|g" "$DEFAULT_CONFIG"
+# sudo sed -i "s|server_name _;|server_name _;|g" "$DEFAULT_CONFIG"
+
 sudo chmod +x "/home/$USER"
 sudo chown -R $USER:www-data "/home/$USER/$SITE_NAME"
 sudo chmod -R 755 "/home/$USER/$SITE_NAME"
@@ -216,38 +220,42 @@ server {
 }
 EOL
 
-
 # Deploy the config
 sudo ln -s "$DEFAULT_CONFIG" "$DEFAULT_ENABLED"
 
 # Restart Nginx to apply changes
 sudo nginx -t && sudo systemctl restart nginx
 
-# Obtain and configure SSL certificate
-echo -e "${YELLOW}Setting up SSL with Let's Encrypt...${ENDCOLOR}"
-sudo apt-get install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d "$DOMAIN_NAME" --non-interactive --agree-tos --test-cert -m "$EMAIL"
-sudo systemctl reload nginx
+if [[ "$UF_MODE" == "production" ]]; then
+    # Obtain and configure SSL certificate
+    echo -e "${BLUE}Setting up SSL with Let's Encrypt...${ENDCOLOR}"
+    sudo apt-get install -y certbot python3-certbot-nginx
+    sudo certbot --nginx -d "$DOMAIN_NAME" --non-interactive --agree-tos --test-cert -m "$EMAIL"
+    sudo systemctl reload nginx
+else
+    echo -e "${BLUE}UF Mode $UF_MODE. Skipping SSL setup. Please configure SSL manually if needed.${ENDCOLOR}"    
+
+fi
 
 echo -e "${GREEN}==========================${ENDCOLOR}"
 echo -e "${GREEN}UserFrosting installation complete.${ENDCOLOR}"
-echo -e "${GREEN}Visit your site @: https://$DOMAIN_NAME ${ENDCOLOR}"
-echo -e "${GREEN}UF MODE: $UF_MODE ${ENDCOLOR}"
-echo -e "${GREEN}UF admin user: $UF_ADMIN_USER ${ENDCOLOR}"
-echo -e "${GREEN}First Name: $UF_ADMIN_FIRST_NAME ${ENDCOLOR}"
-echo -e "${GREEN}Last Name: $UF_ADMIN_LAST_NAME ${ENDCOLOR}"
-echo -e "${GREEN}Site Name: $SITE_NAME ${ENDCOLOR}"
-echo -e "${GREEN}Domain Name: $DOMAIN_NAME ${ENDCOLOR}"
-echo -e "${GREEN}Email: $UF_ADMIN_EMAIL ${ENDCOLOR}"
-echo -e "${GREEN}Password : $UF_ADMIN_PASSWORD ${ENDCOLOR}"
-echo -e "${GREEN}Document Root: $ROOT_DIR ${ENDCOLOR}"
-echo -e "${GREEN}DB Connection: $DB_CONNECTION ${ENDCOLOR}"
-echo -e "${GREEN}DB Name: $DB_NAME ${ENDCOLOR}"
-echo -e "${GREEN}DB User: $DB_USER ${ENDCOLOR}"
-echo -e "${GREEN}Password: $DB_PASSWORD ${ENDCOLOR}"
-echo -e "${GREEN}MySQL Root Password: $MYSQL_ROOT_PASSWORD ${ENDCOLOR}"
-
-echo -e "${GREEN}${ENDCOLOR}"
+echo -e "Visit your site @: https://$DOMAIN_NAME"
+echo -e "UF MODE: ${BLUE}$UF_MODE ${ENDCOLOR}"
+if [[ "$UF_MODE" != "production" ]]; then
+    echo -e "UF admin user: $UF_ADMIN_USER"
+    echo -e "First Name: $UF_ADMIN_FIRST_NAME"
+    echo -e "Last Name: $UF_ADMIN_LAST_NAME"
+    echo -e "Site Name: $SITE_NAME"
+    echo -e "Domain Name: $DOMAIN_NAME"
+    echo -e "Email: $UF_ADMIN_EMAIL"
+    echo -e "Password : $UF_ADMIN_PASSWORD"
+    echo -e "Document Root: $ROOT_DIR"
+    echo -e "DB Connection: $DB_CONNECTION"
+    echo -e "DB Name: $DB_NAME"
+    echo -e "DB User: $DB_USER"
+    echo -e "Password: $DB_PASSWORD"
+    echo -e "MySQL Root Password: $MYSQL_ROOT_PASSWORD"
+fi
 echo -e "${GREEN}==========================${ENDCOLOR}"
 
 # delete this script
