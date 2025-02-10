@@ -54,11 +54,13 @@ The Database Migrator will askyou to confirm that you want to run the listed mig
 ##### Seeder
 The Seeder will ask you:
  
- > Select seed(s) to run. Multiple seeds can be selected using comma separated values:
+```bash
+ Select seed(s) to run. Multiple seeds can be selected using comma separated values:
  > [0] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultGroups
  > [1] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultPermissions
  > [2] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultRoles
-
+ > >
+```
 Type `0,1,2` and hit enter. Or if you cloned a differnt repo check that all the requested seeds are listed and modify you input accodingly.
 
 You will then be asked to confrim your entry with `Do you really wish to continue ? (yes/no) [no]:` Confirm yes.
