@@ -240,6 +240,7 @@ sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/logs"
 
 echo -e "${YELLOW}Backing Assets${ENDCOLOR}"
 php bakery assets:build
+npm audit fix --force
 
 echo -e "${GREEN}==========================${ENDCOLOR}"
 echo -e "${GREEN}UserFrosting installation complete.${ENDCOLOR}"
