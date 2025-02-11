@@ -66,6 +66,7 @@ SITE_NAME="${SITE_NAME:-$DOMAIN_NAME}"
 USERFROSTING_VERSION="${USERFROSTING_VERSION:-^5.1}"
 GIT_REPO="${GIT_REPO:-userfrosting/UserFrosting}"
 EXE_SQL="${EXE_SQL:-true}"
+IMPORT_DUMP="${IMPORT_DUMP:-false}"
 DB_CONNECTION="${DB_CONNECTION:-mysql}"
 DB_HOST="${DB_HOST:-localhost}"
 DB_PORT="${DB_PORT:-3306}"
@@ -122,12 +123,16 @@ if [[ "$EXE_SQL" == true ]]; then
     ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD';
     CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;
     CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWORD';
-    GRANT ALL PRIVILEGES ON \`$DB_NAME\`.* TO '$DB_USER'@'localhost';
+    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, REFERENCES, ALTER ON \`$DB_NAME\`.* TO '$DB_USER'@'localhost';
     FLUSH PRIVILEGES;
 EOF
     
+fi
+
+if [[ "$IMPORT_DUMP" == true ]]; then
+    echo -e "${YELLOW}Importing SQL dump file...${ENDCOLOR}"
     if [[ -f "dump.sql" ]]; then
-        echo -e "${YELLOW}Importing SQL dump file...${ENDCOLOR}"
+        
         sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$DB_NAME" < dump.sql
     else
         echo -e "${YELLOW}No SQL dump file found. Skipping import.${ENDCOLOR}"
@@ -144,7 +149,7 @@ read -n 1 -s -r -p "Press any key to continue..."
 echo -e "${ENDCOLOR}"
 
 echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
-#composer create-project "$GIT_REPO" "$SITE_NAME" "$USERFROSTING_VERSION"
+
 git clone https://github.com/userfrosting/UserFrosting.git $SITE_NAME
 cd $SITE_NAME
 
@@ -156,18 +161,20 @@ sudo chown -R $USER:$USER "$USER_HOME/$SITE_NAME/app/.env"
 
 echo -e "${YELLOW}Running Composer install...${ENDCOLOR}"
 composer install
-
-echo -e "${YELLOW}Building Database...${ENDCOLOR}"
-php bakery setup:db --force --db_driver $DB_CONNECTION --db_name $DB_NAME --db_host $DB_HOST --db_port $DB_PORT --db_user $DB_USER --db_password $DB_PASSWORD
-
-php bakery migrate
-
-echo -e "${YELLOW}Seeding Database...${ENDCOLOR}"
-php bakery seed 
-
-echo -e "${YELLOW}Creating admin user account...${ENDCOLOR}"
-php bakery create:admin-user --username="$UF_ADMIN_USER" --email="$UF_ADMIN_EMAIL" --password="$UF_ADMIN_PASSWORD" --firstName="$UF_ADMIN_FIRST_NAME" --lastName="$UF_ADMIN_LAST_NAME"
-
+if [[ "$EXE_SQL" == true ]]; then
+    echo -e "${YELLOW}Building Database...${ENDCOLOR}"
+    php bakery setup:db --force --db_driver $DB_CONNECTION --db_name $DB_NAME --db_host $DB_HOST --db_port $DB_PORT --db_user $DB_USER --db_password $DB_PASSWORD
+    
+    php bakery migrate
+    
+    echo -e "${YELLOW}Seeding Database...${ENDCOLOR}"
+    php bakery seed 
+    
+    echo -e "${YELLOW}Creating admin user account...${ENDCOLOR}"
+    php bakery create:admin-user --username="$UF_ADMIN_USER" --email="$UF_ADMIN_EMAIL" --password="$UF_ADMIN_PASSWORD" --firstName="$UF_ADMIN_FIRST_NAME" --lastName="$UF_ADMIN_LAST_NAME"
+else
+    echo -e "${YELLOW}UF Database setup skipped.${ENDCOLOR}"
+if
 echo -e "${GREEN}Completed!${ENDCOLOR}"
 
 # Configure Nginx
