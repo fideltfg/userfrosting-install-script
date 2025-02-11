@@ -103,7 +103,7 @@ sudo systemctl status mysql
 - UF Bakery still needs some input to setup and seed the database.
 
 ## Work-Arounds
-In order to prevent users from flooding Let's Encrypts servers when testing this script, the `--test-cert` flagg is set for certbot by default. 
+In order to prevent users from flooding Let's Encrypts servers when testing this script, the `--test-cert` flag is set for certbot by default. 
 
 > [!IMPORTANT]  
 > The `--test-cert` flag may cause Let's Encrypt to issue your site with an expired certificate. This in turn can cause issues with some antivirus softwear and will cause your browser to see the page as insecure.
