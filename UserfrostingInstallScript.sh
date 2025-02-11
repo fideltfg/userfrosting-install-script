@@ -118,14 +118,23 @@ if [[ "$EXE_SQL" == true ]]; then
     sudo apt-get install -y mysql-server
     sudo systemctl start mysql
     sudo systemctl enable mysql
-    
     sudo mysql --defaults-file=/etc/mysql/debian.cnf <<EOF
     ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD';
     CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;
     CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWORD';
-    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, REFERENCES, ALTER ON \`$DB_NAME\`.* TO '$DB_USER'@'localhost';
+    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, REFERENCES, ALTER ON \`$DB_NAME\`.* TO '$DB_USER'@'localhost';
+    GRANT RELOAD ON *.* TO '$DB_USER'@'localhost';
     FLUSH PRIVILEGES;
 EOF
+#     sudo mysql --defaults-file=/etc/mysql/debian.cnf <<EOF
+#     ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD';
+#     CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;
+#     CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWORD';
+#     GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, REFERENCES, ALTER ON \`$DB_NAME\`.* TO '$DB_USER'@'localhost';
+#     FLUSH PRIVILEGES;
+# EOF
+
+
     
 fi
 
