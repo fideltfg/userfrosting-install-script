@@ -106,7 +106,6 @@ sudo systemctl status mysql
 - If the repo being cloned is private, ensure you have your public ssh key added on Github. Depending on how your key was generated you may be asked to enter your keys passphrase at that point in the script.
 
 ## Known Issues
-- Database migrations and seeds still requiers user input. See migration and seed sections above.
 - UF Bakery still needs some input to setup and seed the database.
 
 ## Work-Arounds
