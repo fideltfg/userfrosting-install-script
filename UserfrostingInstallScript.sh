@@ -63,7 +63,7 @@ fi
 DOMAIN_NAME="${DOMAIN_NAME:-example.com}"
 EMAIL="${EMAIL:-example@email.com}"
 SITE_NAME="${SITE_NAME:-$DOMAIN_NAME}"
-USERFROSTING_VERSION="${USERFROSTING_VERSION:-^5.1}"
+#USERFROSTING_VERSION="${USERFROSTING_VERSION:-^5.1}"
 GIT_REPO="${GIT_REPO:-userfrosting/UserFrosting}"
 EXE_SQL="${EXE_SQL:-true}"
 IMPORT_DUMP="${IMPORT_DUMP:-false}"
@@ -132,7 +132,6 @@ fi
 if [[ "$IMPORT_DUMP" == true ]]; then
     echo -e "${YELLOW}Importing SQL dump file...${ENDCOLOR}"
     if [[ -f "dump.sql" ]]; then
-        
         sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$DB_NAME" < dump.sql
     else
         echo -e "${YELLOW}No SQL dump file found. Skipping import.${ENDCOLOR}"
@@ -153,7 +152,7 @@ echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
 git clone https://github.com/userfrosting/UserFrosting.git $SITE_NAME
 cd $SITE_NAME
 
-echo -e "${YELLOW}Creating and populating .env file... ${ENDCOLOR}"
+echo -e "${YELLOW}Creating and populating $USER_HOME/$SITE_NAME/app/.env file... ${ENDCOLOR}"
 printf 'UF_MODE="%s"\nURI_PUBLIC="%s"\nDB_CONNECTION="%s"\nDB_HOST="%s"\nDB_PORT="%s"\nDB_NAME="%s"\nDB_USER="%s"\nDB_PASSWORD="%s"\nMAIL_MAILER="%s"\nSMTP_SERVER="%s"\nSMTP_USER="%s"\nSMTP_PASSWORD="%s"\nSMTP_PORT="%s"\nSMTP_AUTH="%s"\nSMTP_SECURE="%s"\nMAIL_FROM_ADDRESS="%s"\nMAIL_FROM_NAME="%s"\n' \
 "$UF_MODE" "$DOMAIN_NAME" "$DB_CONNECTION" "$DB_HOST" "$DB_PORT" "$DB_NAME" "$DB_USER" "$DB_PASSWORD" "$MAIL_MAILER" "$SMTP_SERVER" "$SMTP_USER" "$SMTP_PASSWORD" "$SMTP_PORT" "$SMTP_AUTH" "$SMTP_SECURE" "$MAIL_FROM_ADDRESS" "$MAIL_FROM_NAME" \
 | sudo tee "$USER_HOME/$SITE_NAME/app/.env" > /dev/null
@@ -161,7 +160,7 @@ sudo chown -R $USER:$USER "$USER_HOME/$SITE_NAME/app/.env"
 
 echo -e "${YELLOW}Running Composer install...${ENDCOLOR}"
 composer install
-if [[ "$EXE_SQL" == true ]]; then
+if [[ "$IMPORT_BUMP" != true ]]; then
     echo -e "${YELLOW}Building Database...${ENDCOLOR}"
     php bakery setup:db --force --db_driver $DB_CONNECTION --db_name $DB_NAME --db_host $DB_HOST --db_port $DB_PORT --db_user $DB_USER --db_password $DB_PASSWORD
     
