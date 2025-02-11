@@ -182,7 +182,7 @@ if [[ "$IMPORT_BUMP" != true ]]; then
     php bakery create:admin-user --username="$UF_ADMIN_USER" --email="$UF_ADMIN_EMAIL" --password="$UF_ADMIN_PASSWORD" --firstName="$UF_ADMIN_FIRST_NAME" --lastName="$UF_ADMIN_LAST_NAME"
 else
     echo -e "${YELLOW}UF Database setup skipped.${ENDCOLOR}"
-if
+fi
 echo -e "${GREEN}Completed!${ENDCOLOR}"
 
 # Configure Nginx
