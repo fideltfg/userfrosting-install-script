@@ -42,8 +42,12 @@ cd ~ && wget https://github.com/fideltfg/userfrostinginstallscript/raw/refs/head
 ```
 This will pull the latest version of the install script, correct the permissions and excute it. 
 
-#### User Input for the Bakery
+#### User Input
 While I tried to make the script run unattended, due to the way the Userfrosting Bakery does its thing ( and me not giving time to this bit yet), the script will ask you to enter your password and make a few choices if required.
+
+
+> [!IMPORTANT]
+> When using a private repo, you may be asked for your ssh key's passphrase.
 
 ##### `sudo` password
 The script will ask you twice for you user password. Once when it first starts and again after the composer install section.
@@ -97,6 +101,7 @@ sudo systemctl status mysql
 - Nginx is configured to serve UserFrosting from `/home/$USER/$SITE_NAME/public`.
 - If a `dump.sql` file is found in the script directory, it will be imported into the database. This has not been fully tested yet.
 - SSL certificates are obtained automatically using Let's Encrypt when UF_MODE="production" else this part is skipped.
+- If the repo being cloned is private, ensure you have your public ssh key added on Github. Depending on how your key was generated you may be asked to enter your keys passphrase at that point in the script.
 
 ## Known Issues
 - Database migrations and seeds still requiers user input. See migration and seed sections above.
