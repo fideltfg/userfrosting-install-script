@@ -120,19 +120,16 @@ if [[ "$EXE_SQL" == true ]]; then
     sudo systemctl enable mysql
     sudo mysql --defaults-file=/etc/mysql/debian.cnf <<EOF
     ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD';
+    DROP DATABASE IF EXISTS test;
+    DELETE FROM mysql.user WHERE User='';
+    DROP DATABASE IF EXISTS \`$DB_NAME\`;
+    DROP USER IF EXISTS '$DB_USER'@'localhost';
     CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;
     CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWORD';
     GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, REFERENCES, ALTER ON \`$DB_NAME\`.* TO '$DB_USER'@'localhost';
     GRANT RELOAD ON *.* TO '$DB_USER'@'localhost';
     FLUSH PRIVILEGES;
 EOF
-#     sudo mysql --defaults-file=/etc/mysql/debian.cnf <<EOF
-#     ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD';
-#     CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;
-#     CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWORD';
-#     GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, REFERENCES, ALTER ON \`$DB_NAME\`.* TO '$DB_USER'@'localhost';
-#     FLUSH PRIVILEGES;
-# EOF
 
 
     
@@ -175,11 +172,13 @@ if [[ "$IMPORT_BUMP" != true ]]; then
     
     php bakery migrate
     
+    echo -e "${YELLOW}Creating admin user account...${ENDCOLOR}"
+    php bakery create:admin-user --username="$UF_ADMIN_USER" --email="$UF_ADMIN_EMAIL" --password="$UF_ADMIN_PASSWORD" --firstName="$UF_ADMIN_FIRST_NAME" --lastName="$UF_ADMIN_LAST_NAME"
+
     echo -e "${YELLOW}Seeding Database...${ENDCOLOR}"
     php bakery seed 
     
-    echo -e "${YELLOW}Creating admin user account...${ENDCOLOR}"
-    php bakery create:admin-user --username="$UF_ADMIN_USER" --email="$UF_ADMIN_EMAIL" --password="$UF_ADMIN_PASSWORD" --firstName="$UF_ADMIN_FIRST_NAME" --lastName="$UF_ADMIN_LAST_NAME"
+    
 else
     echo -e "${YELLOW}UF Database setup skipped.${ENDCOLOR}"
 fi
