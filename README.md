@@ -47,7 +47,7 @@ While I tried to make the script run unattended, due to the way the Userfrosting
 
 
 > [!NOTE]
-> When using a private repo, you may be asked for your ssh key's passphrase.
+> If the repo being cloned is private, ensure you have your public ssh key added on Github. Depending on how your key was generated you may be asked to enter your keys passphrase at that point in the script.
 
 ##### `sudo` password
 The script will ask you twice for you user password. Once when it first starts and again after the composer install section.
