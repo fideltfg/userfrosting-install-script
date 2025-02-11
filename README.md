@@ -91,10 +91,13 @@ If you set the `UF_MODE` to anything other than production you will be given a m
 
 ### Logs
 Currently the logs for Nginx, MySQL and PHP are in ther default location the OS distro.
-If you encounter issues, check the Nginx and MySQL logs with the command respectivly.
+If you encounter issues, check the Nginx with:
 ```bash
 sudo journalctl -u nginx --no-pager
-sudo systemctl status mysql
+```
+mysqld will log errors to:
+```bash
+/var/log/mysql/error.log
 ```
 
 ## Notes
