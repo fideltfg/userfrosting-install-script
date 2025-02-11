@@ -252,7 +252,7 @@ sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/sessions"
 
 echo -e "${YELLOW}Baking Assets${ENDCOLOR}"
 php bakery assets:build
-
+npx update-browserslist-db@latest
 echo -e "${GREEN}==========================${ENDCOLOR}"
 echo -e "${GREEN}UserFrosting installation complete.${ENDCOLOR}"
 echo -e "Visit your site @: https://$DOMAIN_NAME"
