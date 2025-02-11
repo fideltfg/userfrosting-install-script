@@ -158,7 +158,7 @@ echo -e "${ENDCOLOR}"
 
 echo -e "${YELLOW}Installing UserFrosting...${ENDCOLOR}"
 
-git clone https://github.com/userfrosting/UserFrosting.git $SITE_NAME
+git clone https://github.com/$GIT_REPO.git $SITE_NAME
 cd $SITE_NAME
 
 echo -e "${YELLOW}Creating and populating $USER_HOME/$SITE_NAME/app/.env file... ${ENDCOLOR}"
