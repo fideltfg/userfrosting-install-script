@@ -46,7 +46,7 @@ This will pull the latest version of the install script, correct the permissions
 While I tried to make the script run unattended, due to the way the Userfrosting Bakery does its thing ( and me not giving time to this bit yet), the script will ask you to enter your password and make a few choices if required.
 
 
-> [!IMPORTANT]
+> [!NOTE]
 > When using a private repo, you may be asked for your ssh key's passphrase.
 
 ##### `sudo` password
