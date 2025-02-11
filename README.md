@@ -43,7 +43,7 @@ cd ~ && wget https://github.com/fideltfg/userfrostinginstallscript/raw/refs/head
 This will pull the latest version of the install script, correct the permissions and excute it. 
 
 #### User Input for the Bakery
-While I tried to make the script run unattended, due to the way the Userfrosting Bakery does its thing ( and me not giving time to this bit yet), the script will ask you enter your password and make a few choices if required.
+While I tried to make the script run unattended, due to the way the Userfrosting Bakery does its thing ( and me not giving time to this bit yet), the script will ask you to enter your password and make a few choices if required.
 
 ##### `sudo` password
 The script will ask you twice for you user password. Once when it first starts and again after the composer install section.
