@@ -34,6 +34,9 @@ DB_USER=userfrosting
 DB_PASSWORD=securepassword
 ......
 ```
+> [!NOTE]
+> If the repo being cloned is private, ensure you have your public ssh key added on [Github](https://docs.github.com/en/authentication/connecting-to-github-with-ssh). Depending on how your key was generated you may be asked to enter your keys passphrase at that point in the script.
+
 
 ### 2. Run the Script
 Run the followng command to install all needed packages, setup MySQL, NGINX Userfrosting. DO NOT RUN AS ROOT!
@@ -46,10 +49,9 @@ This will pull the latest version of the install script, correct the permissions
 While I tried to make the script run unattended, due to the way the Userfrosting Bakery does its thing ( and me not giving time to this bit yet), the script will ask you to enter your password and make a few choices if required.
 
 
-> [!NOTE]
-> If the repo being cloned is private, ensure you have your public ssh key added on [Github](https://docs.github.com/en/authentication/connecting-to-github-with-ssh). Depending on how your key was generated you may be asked to enter your keys passphrase at that point in the script.
 
-##### `sudo` password
+
+##### sudo password
 The script will ask you twice for you user password. Once when it first starts and again after the composer install section.
 
 ##### Database Migrator
