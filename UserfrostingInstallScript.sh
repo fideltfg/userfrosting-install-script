@@ -131,18 +131,18 @@ if [[ "$EXE_SQL" == true ]]; then
     FLUSH PRIVILEGES;
 EOF
 
-
+    if [[ "$IMPORT_DUMP" == true ]]; then
+        echo -e "${YELLOW}Importing SQL dump file...${ENDCOLOR}"
+        if [[ -f "dump.sql" ]]; then
+            sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$DB_NAME" < dump.sql
+        else
+            echo -e "${YELLOW}No SQL dump file found. Skipping import.${ENDCOLOR}"
+        fi
+    fi
     
 fi
 
-if [[ "$IMPORT_DUMP" == true ]]; then
-    echo -e "${YELLOW}Importing SQL dump file...${ENDCOLOR}"
-    if [[ -f "dump.sql" ]]; then
-        sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$DB_NAME" < dump.sql
-    else
-        echo -e "${YELLOW}No SQL dump file found. Skipping import.${ENDCOLOR}"
-    fi
-fi
+
 
 # Install Nginx
 echo -e "${YELLOW}Installing Nginx...${ENDCOLOR}"
