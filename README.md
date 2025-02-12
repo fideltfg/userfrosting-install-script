@@ -90,14 +90,18 @@ If you set the `UF_MODE` to anything other than production you will be given a m
 > Only run the script with UF_MODE set to production on a fresh clean server to avoid this. Dev &harr; Test &rarr; Wipe &rarr; Deploy
 
 ### Logs
-Currently the logs for Nginx, MySQL and PHP are in ther default location the OS distro.
-If you encounter issues, check the Nginx with:
+Currently the logs for Nginx, MySQL and PHP are in ther default locations for the distro you used.
+If you encounter issues, check the Nginx logs with:
 ```bash
-sudo journalctl -u nginx --no-pager
+sudo tail -f /var/log/nginx/error.log
 ```
-mysqld will log errors to:
+The MySQL logs with:
 ```bash
-/var/log/mysql/error.log
+sudo tail -f /var/log/mysql/error.log
+```
+The  Userfrosting error log with:
+```
+tail -f ~/NQView/app/logs/userfrosting.log
 ```
 
 ## Notes
