@@ -134,7 +134,7 @@ EOF
     if [[ "$IMPORT_DUMP" == true ]]; then
         echo -e "${YELLOW}Importing SQL dump file...${ENDCOLOR}"
         if [[ -f "dump.sql" ]]; then
-            echo -e "${GREEN}Dump file found. ${ENDCOLOR}"
+            echo -e "${GREEN}Dump file found. Please enter your MySQL Root Password. ${ENDCOLOR}"
             sudo mysql -u root -p "$DB_NAME" < dump.sql
         else
             echo -e "${YELLOW}No SQL dump file found. Skipping import.${ENDCOLOR}"
