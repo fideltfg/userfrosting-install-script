@@ -135,7 +135,7 @@ EOF
         echo -e "${YELLOW}Importing SQL dump file...${ENDCOLOR}"
         if [[ -f "dump.sql" ]]; then
             echo -e "${GREEN}Dump file found. ${ENDCOLOR}"
-            sudo mysql -u $DB_USER -p"$DB_PASSWORD" "$DB_NAME" < dump.sql
+            sudo mysql -u root -p "$DB_NAME" < dump.sql
         else
             echo -e "${YELLOW}No SQL dump file found. Skipping import.${ENDCOLOR}"
         fi
