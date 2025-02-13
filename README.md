@@ -101,7 +101,7 @@ sudo tail -f /var/log/mysql/error.log
 ```
 The  Userfrosting error log with:
 ```
-tail -f ~/NQView/app/logs/userfrosting.log
+tail -f ~/<YOURSITENAME>/app/logs/userfrosting.log
 ```
 
 ## Notes
