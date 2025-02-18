@@ -39,7 +39,7 @@ DB_PASSWORD=securepassword
 > [!WARNING]
 > The EXE_SQL parameter when set true will force the script to erase any database with the name set in DB_HOST.
 >
-> If the IMPORT_DUMP parameter is set true the script will attempt to import a file called dump.sql and execute the commands it contains on the named database. Ensure the file exists and that you know its contents are correct.
+> If the IMPORT_DUMP parameter is set true the script will attempt to import a file called dump.sql and execute the commands it contains on the named database. Ensure the file exists and that you know its contents are correct. The Userfrosting migration and seeding steps are also skipped.
 
 > [!NOTE]
 > If the repo being cloned is private, ensure you have your public ssh key added on [Github](https://docs.github.com/en/authentication/connecting-to-github-with-ssh). Depending on how your key was generated you may be asked to enter your keys passphrase at that point in the script.
