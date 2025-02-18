@@ -34,6 +34,13 @@ DB_USER=userfrosting
 DB_PASSWORD=securepassword
 ......
 ```
+
+
+> [!WARNING]
+> The EXE_SQL parameter when set true will force the script to erase any database with the name set in DB_HOST.
+>
+> If the IMPORT_DUMP parameter is set true the script will attempt to import a file called dump.sql and execute the commands it contains on the named database. Ensure the file exists and that you know its contents are correct.
+
 > [!NOTE]
 > If the repo being cloned is private, ensure you have your public ssh key added on [Github](https://docs.github.com/en/authentication/connecting-to-github-with-ssh). Depending on how your key was generated you may be asked to enter your keys passphrase at that point in the script.
 
@@ -58,13 +65,14 @@ The script will ask you twice for you user password. Once when it first starts a
 ~~The Database Migrator will askyou to confirm that you want to run the listed migrations. Confirm yes.~~
 
 ##### Seeder
-The Seeder will ask you:
+The Seeder will ask you to select which seads you want to run:
  
 ```bash
  Select seed(s) to run. Multiple seeds can be selected using comma separated values:
  [0] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultGroups
  [1] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultPermission
  [2] UserFrosting\Sprinkle\Account\Database\Seeds\DefaultRoles
+ ....
  >
 ```
 Type `0,1,2` and hit enter. Or if you cloned a differnt repo check that all the requested seeds are listed and modify your input accodingly.
