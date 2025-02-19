@@ -252,7 +252,7 @@ sudo chown -R $USER:www-data "$USER_HOME/$SITE_NAME/app/logs"
 sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/logs"
 sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/cache"
 sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/sessions"
-sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/storage"
+sudo chmod -R 750 "$USER_HOME/$SITE_NAME/app/storage"
 
 
 
