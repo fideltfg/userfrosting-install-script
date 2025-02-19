@@ -119,6 +119,7 @@ tail -f ~/<YOURSITENAME>/app/logs/userfrosting.log
 - If a `dump.sql` file is found in the script directory, it will be imported into the database. This has not been fully tested yet.
 - SSL certificates are obtained automatically using Let's Encrypt when UF_MODE="production" else this part is skipped.
 - If the repo being cloned is private, ensure you have your public ssh key added on Github. Depending on how your key was generated you may be asked to enter your keys passphrase at that point in the script.
+- Ensure that the values in the `config/default.php are all set the to the correct values for your site.
 
 ## Known Issues
 - UF Bakery still needs some input to setup and seed the database.
