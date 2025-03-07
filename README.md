@@ -1,5 +1,8 @@
 # UserFrosting Installation Script
 
+> [!NOTE]
+> PLEASE READ THE FULL README BELOW BEFORE YOU RUN THE SCRIPT!
+
 ## Overview
 This script automates the installation and configuration of [UserFrosting](https://www.userfrosting.com/) on an Ubuntu 24.04.1+ server. It installs required dependencies, sets up a MySQL database, configures an Nginx web server, and enables SSL with Let's Encrypt.
 
@@ -53,13 +56,10 @@ cd ~ && wget https://github.com/fideltfg/userfrosting-install-script/raw/refs/he
 This will pull the latest version of the install script, correct the permissions and excute it. 
 
 #### User Input
-While I tried to make the script run unattended, due to the way the Userfrosting Bakery does its thing ( and me not giving time to this bit yet), the script will ask you to enter your password and make a few choices if required.
-
-
-
+While I tried to make the script run unattended, due to the way the Userfrosting Bakery does its thing, the script will ask you to enter passwords and make a few choices if required.
 
 ##### sudo password
-The script will ask you twice for you user password. Once when it first starts and again after the composer install section.
+The script will ask you a numberof times for you users sudo password. Once when it first starts and again after the composer install section.
 
 ##### Database Migrator
 ~~The Database Migrator will askyou to confirm that you want to run the listed migrations. Confirm yes.~~
@@ -75,7 +75,7 @@ The Seeder will ask you to select which seads you want to run:
  ....
  >
 ```
-Type `0,1,2` and hit enter. Or if you cloned a differnt repo check that all the requested seeds are listed and modify your input accodingly.
+Type `0,1,2` and hit enter. Or if you cloned a differnt repo check that all the required seeds are listed and modify your input accodingly.
 
 You will then be asked to confrim your entry with `Do you really wish to continue ? (yes/no) [no]:` Confirm yes.
 
@@ -98,7 +98,7 @@ If you set the `UF_MODE` to anything other than production you will be given a m
 > Only run the script with UF_MODE set to production on a fresh clean server to avoid this. Dev &harr; Test &rarr; Wipe &rarr; Deploy
 
 ### Logs
-Currently the logs for Nginx, MySQL and PHP are in ther default locations for the distro you used.
+The logs for Nginx, MySQL and PHP are in ther default locations for the distro you used.
 If you encounter issues, check the Nginx logs with:
 ```bash
 sudo tail -f /var/log/nginx/error.log
@@ -116,7 +116,6 @@ tail -f ~/<YOURSITENAME>/app/logs/userfrosting.log
 - This script tries to load configuration values from an optional `.env` file located in the users home folder.
 - MySQL authentication is set to `mysql_native_password`.
 - Nginx is configured to serve UserFrosting from `/home/$USER/$SITE_NAME/public`.
-- If a `dump.sql` file is found in the script directory, it will be imported into the database. This has not been fully tested yet.
 - SSL certificates are obtained automatically using Let's Encrypt when UF_MODE="production" else this part is skipped.
 - If the repo being cloned is private, ensure you have your public ssh key added on Github. Depending on how your key was generated you may be asked to enter your keys passphrase at that point in the script.
 - Ensure that the values in the `config/default.php are all set the to the correct values for your site.
