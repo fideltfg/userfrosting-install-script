@@ -246,12 +246,37 @@ else
 
 fi
 
-#set UF required permissions
-sudo usermod -a -G www-data $USER
+# #set UF required permissions
+# sudo usermod -a -G www-data $USER
+# sudo chown -R $USER:www-data "$USER_HOME/$SITE_NAME/app/logs"
+# sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/logs"
+# sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/cache"
+# sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/sessions"
+# sudo chmod -R 750 "$USER_HOME/$SITE_NAME/app/storage"
+
+# check that the /app/logs folder exists
+if [ ! -d "$USER_HOME/$SITE_NAME/app/logs" ]; then
+    mkdir "$USER_HOME/$SITE_NAME/app/logs"
+fi
 sudo chown -R $USER:www-data "$USER_HOME/$SITE_NAME/app/logs"
 sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/logs"
+
+# check that the /app/cache folder exists
+if [ ! -d "$USER_HOME/$SITE_NAME/app/cache" ]; then
+    mkdir "$USER_HOME/$SITE_NAME/app/cache"
+fi
 sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/cache"
+
+# check that the /app/sessions folder exists
+if [ ! -d "$USER_HOME/$SITE_NAME/app/sessions" ]; then
+    mkdir "$USER_HOME/$SITE_NAME/app/sessions"
+fi
 sudo chmod -R 775 "$USER_HOME/$SITE_NAME/app/sessions"
+
+# check that the /app/storage folder exists
+if [ ! -d "$USER_HOME/$SITE_NAME/app/storage" ]; then
+    mkdir "$USER_HOME/$SITE_NAME/app/storage"
+fi
 sudo chmod -R 750 "$USER_HOME/$SITE_NAME/app/storage"
 
 
