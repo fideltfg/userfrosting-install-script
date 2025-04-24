@@ -28,7 +28,6 @@ Create a `.env` file in your home folder and populate ALL the values. See the ex
 DOMAIN_NAME=yourdomain.com
 EMAIL=admin@yourdomain.com
 SITE_NAME=your-site-folder
-USERFROSTING_VERSION=^5.1
 GIT_REPO=userfrosting/UserFrosting
 EXE_SQL=true
 MYSQL_ROOT_PASSWORD=securepassword
